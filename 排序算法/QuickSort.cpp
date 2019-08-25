@@ -28,18 +28,18 @@
  * */
 template<typename T>
 void QuickSort(std::vector<T> &arr, int l, int r) {
-	if(l >= r) return;
-	int toSwap = l;
-	int target = l;
-	for(int i = l + 1; i <= r; ++i) {
-		if(arr[i] < arr[target]) {
-			std::swap(arr[i], arr[toSwap]);
-			if(toSwap == target) target = i;
-			toSwap++;
-		}	
-	}
-	std::swap(arr[toSwap], arr[target]);
-	target = toSwap;
-	QuickSort(arr, l, target - 1);
-	QuickSort(arr, target + 1, r);
+    if(l >= r) return;
+    int toSwap = l;
+    int target = l;
+    for(int i = l + 1; i <= r; ++i) {
+        if(arr[i] < arr[target]) {
+            std::swap(arr[i], arr[toSwap]);
+                if(toSwap == target) target = i;
+                toSwap++;
+        }	
+    }
+    std::swap(arr[toSwap], arr[target]);
+    target = toSwap;
+    QuickSort(arr, l, target - 1);
+    QuickSort(arr, target + 1, r);
 }
