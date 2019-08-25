@@ -11,20 +11,20 @@
  * Function:        QuickSort
  * Description:     快速排序
  * Input:
- * 		arr			排序容器
- * 		l			容器左端点，闭区间
- * 		r			容器右端点，闭区间
+ *     arr          排序容器
+ *     l            容器左端点，闭区间
+ *     r            容器右端点，闭区间
  * Return:
- *		None
+ *     None
  * Note:
- *		将arr[l] 作为哨兵点 target = l
- *		维护哨兵点位置target
- *		每次与arr[target]比较，并维护一下条件:
- *			arr[l..toSwap) < arr[target]
- *		最终达成:
- *			arr[l..target-1] < arr[target] < arr[target+1...r]
+ *     将arr[l] 作为哨兵点 target = l
+ *     维护哨兵点位置target而非哨兵值，节省复制构造函数消耗
+ *     每次与arr[target]比较，并维护一下条件:
+ *         arr[l..toSwap) < arr[target]
+ *     最终达成:
+ *         arr[l..target-1] < arr[target] < arr[target+1...r]
  * Sample:
- * 		QuickSrot<int>(arr, 0, arr.size() - 1);
+ *         QuickSrot<int>(arr, 0, arr.size() - 1);
  * */
 template<typename T>
 void QuickSort(std::vector<T> &arr, int l, int r) {
