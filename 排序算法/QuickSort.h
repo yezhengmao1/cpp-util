@@ -1,5 +1,9 @@
+#ifndef QUICKSORT_H_
+#define QUICKSORT_H_
+#include <vector>
+#include <algorithm>
 /*
- * File:            QuickSort.cpp
+ * File:            QuickSort.h
  * Description:     快速排序
  * Author:          Pipapa
  * Email:           yezhengmaolove@gmail.com
@@ -43,3 +47,4 @@ void QuickSort(std::vector<T> &arr, int l, int r) {
     QuickSort(arr, l, target - 1);
     QuickSort(arr, target + 1, r);
 }
+#endif
