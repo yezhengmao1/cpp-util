@@ -1,11 +1,12 @@
 # 编译选项
 CC := g++
-CFLAGS := -std=c++11 -stdlib=libc++ -g
+CFLAGS := -std=c++11 -g
 LDFLAGS := /usr/local/lib/libgtest.a \
-		   /usr/local/lib/libgtest_main.a \
+           /usr/local/lib/libgtest_main.a \
+           -lpthread \
 # 头文件
 INCLUDE = -I /usr/local/include \
-		  -I ../排序算法 \
+          -I ../排序算法 \
 # 源文件
 TEST_MAIN := test_main.cpp
 
@@ -17,3 +18,4 @@ all:
 .PHONY : clean
 clean:
 	rm $(TEST_SORT)
+
