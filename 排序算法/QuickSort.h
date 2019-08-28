@@ -38,7 +38,9 @@ void QuickSort(std::vector<T> &arr, int l, int r) {
     for(int i = l + 1; i <= r; ++i) {
         if(arr[i] < arr[target]) {
             std::swap(arr[i], arr[toSwap]);
-            if(toSwap == target) target = i;
+            if(toSwap == target) {
+                target = i;
+            }
             toSwap++;
         }
     }

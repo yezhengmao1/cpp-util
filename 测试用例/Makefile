@@ -23,7 +23,7 @@ ut:
 	@if [ $(LLT) == 1 ]; then \
 		./test_sort; \
 		gcov $(TEST_SORT).cpp; \
-		lcov -d . -t 'UnitTest' -o 'UnitTest.info' -b . -c; \
+		/tmp/lcov-git/pkg/lcov-git/usr/bin/lcov -d . -t 'UnitTest' -o 'UnitTest.info' -b . -c; \
 		genhtml -o result UnitTest.info; \
 		rm -rf UnitTest.info; \
 	fi; \
