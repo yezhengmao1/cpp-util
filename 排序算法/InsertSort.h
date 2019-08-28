@@ -28,8 +28,8 @@
  * */
 template<typename T>
 void InsertSort(std::vector<T> &arr, int l, int r) {
-    for(int i = 1; i <= r; ++i) {
-        for(int j = i - 1; j >= 0 && arr[j] > arr[j+1]; --j) {
+    for(int i = l+1; i <= r; ++i) {
+        for(int j = i-1; j >= l && arr[j] > arr[j+1]; --j) {
             std::swap(arr[j], arr[j+1]);
         }
     }    
