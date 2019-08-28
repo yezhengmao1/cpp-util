@@ -1,5 +1,5 @@
-#ifndef SELECTSORT_H_
-#define SELECTSORT_H_
+#ifndef BUBBLESORT_H_
+#define BUBBLESORT_H_
 #include <vector>
 #include <algorithm>
 /*
@@ -27,13 +27,11 @@
  *      SelectSort<int>(arr);
  * */
 template<typename T>
-void SelectSort(std::vector<T> &arr, int l, int r) {
+void BubbleSort(std::vector<T> &arr, int l, int r) {
     for(int i = l; i < r; ++i) {
-        int min = i;
-        for(int j = i + 1; j <= r; ++j) {
-            if(arr[j] < arr[min]) min = j;
+        for(int j = r; j > i; --j) {
+            if(arr[j] < arr[j-1]) std::swap(arr[j], arr[j-1]);
         }
-        std::swap(arr[i], arr[min]);
     }
 }
 #endif

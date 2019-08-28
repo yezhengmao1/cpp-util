@@ -23,7 +23,7 @@
  * Note:
  *     将arr[l] 作为哨兵点 target = l
  *     维护哨兵点位置target而非哨兵值，节省复制构造函数消耗
- *     每次与arr[target]比较，并维护一下条件:
+ *     每次与arr[target]比较，并维护以下条件:
  *         arr[l..toSwap) < arr[target]
  *     最终达成:
  *         arr[l..target-1] < arr[target] < arr[target+1...r]
@@ -38,9 +38,11 @@ void QuickSort(std::vector<T> &arr, int l, int r) {
     for(int i = l + 1; i <= r; ++i) {
         if(arr[i] < arr[target]) {
             std::swap(arr[i], arr[toSwap]);
-                if(toSwap == target) target = i;
-                toSwap++;
-        }	
+            if(toSwap == target) {
+                target = i;
+            }
+            toSwap++;
+        }
     }
     std::swap(arr[toSwap], arr[target]);
     target = toSwap;
