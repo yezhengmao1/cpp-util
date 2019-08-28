@@ -1,9 +1,7 @@
 # 编译选项
 CC := g++
 CFLAGS := -std=c++11 -g
-LDFLAGS := /usr/local/lib/libgtest.a \
-           /usr/local/lib/libgtest_main.a \
-           -lpthread \
+LDFLAGS := -lgtest -pthread
 # 头文件
 INCLUDE = -I /usr/local/include \
           -I ../排序算法 \
