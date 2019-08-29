@@ -1,6 +1,7 @@
 #ifndef KMP_H_
 #define KMP_H_
 #include <string>
+#include <vector>
 /*
  * File:            kmp.h
  * Description:     字符串Knuth-Morris-Pratt查找算法
@@ -26,11 +27,11 @@
  *     std::vector<int> ans = KMP("AAAAAA", "A");
  * */
 
-int KMP(std::string &str, std::string &pattern) {
+int KMP(const std::string &str, const std::string &pattern) {
     int len = pattern.length();
     if(len <= 0) return 0;
     // 计算next数组
-    int *next = new int[len+2];
+    std::vector<int> next(len+2, 0);
     next[0] = next[1] = 0;
     int q = 0;
     for(int i = 1; pattern[i] != '\0'; ++i) {
