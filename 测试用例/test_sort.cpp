@@ -2,6 +2,8 @@
 #include "QuickSort.h"
 #include "InsertSort.h"
 #include "HeapSort.h"
+#include "SelectSort.h"
+#include "BubbleSort.h"
 
 #include <utility>
 #include <random>
@@ -10,7 +12,7 @@
 using SortFun = void (*) (std::vector<int>&, int, int);
 using TestCaseArr = std::vector<std::vector<int>>;
 
-class SortTest : public ::testing::Test{
+class SortTest : public ::testing::Test {
 protected:
     virtual void SetUp() {}
     virtual void TearDown() {}
@@ -113,3 +115,10 @@ TEST_F(SortTest, test_insert_sort) {
     TestSortFunc(InsertSort);
 }
 
+TEST_F(SortTest, test_select_sort) {
+    TestSortFunc(SelectSort);
+}
+
+TEST_F(SortTest, test_bubble_sort) {
+    TestSortFunc(BubbleSort);
+}

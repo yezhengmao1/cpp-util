@@ -10,26 +10,37 @@ endif
 # 头文件
 INCLUDE = -I /usr/local/include \
           -I ../排序算法 \
+		  -I ../字符串 \
 # 源文件
 TEST_MAIN := test_main.cpp
 
-TEST_SORT := test_sort
+TEST_SOURCE := test_sort
+TEST_SOURCE += test_string
 
 all: 
-	$(CC) $(INCLUDE) $(CFLAGS) -o $(TEST_SORT) $(TEST_MAIN) $(TEST_SORT).cpp $(LDFLAGS)
+	@ for i in $(TEST_SOURCE); \
+	do \
+	echo complie $${i};\
+	$(CC) $(INCLUDE) $(CFLAGS) -o $$i $(TEST_MAIN) $${i}.cpp $(LDFLAGS); \
+	done
 
-.PHONY: ut
-ut:
-	@if [ $(LLT) == 1 ]; then \
-		./test_sort; \
-		gcov $(TEST_SORT).cpp; \
-		lcov -d . -t 'UnitTest' -o 'UnitTest.info' -b . -c; \
-		genhtml -o result UnitTest.info; \
-		rm -rf UnitTest.info; \
-	fi; \
+.PHONY: lcov
+lcov:
+	@ for i in $(TEST_SOURCE); \
+	do \
+	./$$i; \
+	gcov $${i}.cpp; \
+	done 
+	lcov -d . -t 'UnitTest' -o 'UnitTest.info' -b . -c; \
+	genhtml -o result UnitTest.info; \
+	rm -rf UnitTest.info; \
 
 .PHONY : clean
 clean:
-	rm $(TEST_SORT)
+	@ for i in $(TEST_SOURCE); \
+	do \
+	echo rm $${i}; \
+	rm $$i; \
+	done
 	rm *.gcno
 	rm *.gcda
