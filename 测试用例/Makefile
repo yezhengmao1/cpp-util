@@ -3,7 +3,7 @@ export LLT = 0
 # 编译选项
 CC := g++
 CFLAGS := -std=c++11 -g
-LDFLAGS := -lgtest -pthread
+LDFLAGS := -lgtest -lpthread
 ifeq ($(LLT), 1) 
 	CFLAGS += -fprofile-arcs -ftest-coverage
 endif

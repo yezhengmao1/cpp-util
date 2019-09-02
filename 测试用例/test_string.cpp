@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "kmp.h"
+#include "Manacher.h"
 
 #include <random>
 #include <string>
@@ -18,10 +19,10 @@ void StringTest::SetUpTestCase() {}
 void StringTest::TearDownTestCase() {}
 
 TEST_F(StringTest, test_kmp) {
-    const int kmpTestCaseNum = 100;
+    const int kmpTestCaseNum = 20;
 
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> strLen(0, 10000);
+    std::uniform_int_distribution<int> strLen(0, 1000);
     std::uniform_int_distribution<char> randomChar('a', 'z');
 
     bool flag = true;
@@ -52,4 +53,8 @@ TEST_F(StringTest, test_kmp) {
         int ret = KMP(kase, subStr);
         ASSERT_EQ(ret, pos);
     }
+}
+
+TEST_F(StringTest, test_manacher) {
+
 }
