@@ -31,9 +31,9 @@ lcov:
 	./$$i; \
 	gcov $${i}.cpp; \
 	done 
-	lcov -d . -t 'UnitTest' -o 'UnitTest.info' -b . -c; \
-	genhtml -o result UnitTest.info; \
-	rm -rf UnitTest.info; \
+	lcov -d . -t 'algorithm' -o 'algorithm.info' -b . -c; \
+	lcov --remove algorithm.info '/usr/*' '/home/pipapa/gcc/*' -o algorithm.info; \
+	genhtml -o result algorithm.info; \
 
 .PHONY : clean
 clean:
@@ -44,3 +44,5 @@ clean:
 	done
 	rm *.gcno
 	rm *.gcda
+	rm *.gcov
+	rm *.info
