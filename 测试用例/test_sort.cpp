@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "Sort.h"
 #include "QuickSort.h"
 #include "InsertSort.h"
 #include "HeapSort.h"
@@ -9,7 +10,8 @@
 #include <random>
 #include <climits>
 
-using SortFun = void (*) (std::vector<int>&, int, int);
+using It = std::vector<int>::iterator;
+using SortFun = std::function<void(It, It, std::less<value_type_t<It>>)>;
 using TestCaseArr = std::vector<std::vector<int>>;
 
 class SortTest : public ::testing::Test {
@@ -50,13 +52,13 @@ void SortTest::CompareVector(std::vector<int> &l, std::vector<int> &r) {
 void SortTest::TestSortFunc(SortFun fun) {
     for(int i = 0; i < kaseNum_; ++i) {
         std::vector<int> testKase(testCase_[i]);
-        (*fun)(testKase, 0, testKase.size() - 1);
+        fun(testKase.begin(), testKase.end(), std::less<value_type_t<It>>());
         CompareVector(testKase, ansCase_[i]);
     }    
     for(int i = 0; i < kaseNum_; ++i) {
         std::vector<int> testCase(segTestCase_[i]);
         std::pair<int, int> lr(seg_[i]);
-        (*fun)(testCase, lr.first, lr.second);
+        fun(testCase.begin() + lr.first, testCase.begin() + lr.second + 1, std::less<value_type_t<It>>());
         CompareVector(testCase, segAnsCase_[i]);
     }
 }
@@ -103,22 +105,6 @@ void SortTest::SetUpTestCase() {
 void SortTest::TearDownTestCase() {
 }
 
-TEST_F(SortTest, test_quick_sort) {
-    TestSortFunc(QuickSort);
-}
-
-TEST_F(SortTest, test_heap_sort) {
-    TestSortFunc(HeapSort);
-}
-
-TEST_F(SortTest, test_insert_sort) {
-    TestSortFunc(InsertSort);
-}
-
-TEST_F(SortTest, test_select_sort) {
-    TestSortFunc(SelectSort);
-}
-
-TEST_F(SortTest, test_bubble_sort) {
-    TestSortFunc(BubbleSort);
+TEST_F(SortTest, TestInsertSort) {
+    TestSortFunc(InsertSort<It>);
 }
