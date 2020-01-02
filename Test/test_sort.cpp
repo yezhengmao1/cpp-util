@@ -6,6 +6,7 @@
 #include "HeapSort.h"
 #include "SelectionSort.h"
 #include "BubbleSort.h"
+#include "MergeSort.h"
 
 #include <utility>
 #include <random>
@@ -99,6 +100,10 @@ void SortTest::TearDownTestCase() {
 
 TEST_F(SortTest, QuickSort) {
     TestSortFunc(QuickSort<It>);
+}
+
+TEST_F(SortTest, MergeSort) {
+    TestSortFunc(MergeSort<It>);
 }
 
 TEST_F(SortTest, InsertionSort) {
