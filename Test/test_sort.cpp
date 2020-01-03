@@ -106,6 +106,10 @@ TEST_F(SortTest, MergeSort) {
     TestSortFunc(MergeSort<It>);
 }
 
+TEST_F(SortTest, HeapSort) {
+    TestSortFunc(HeapSort<It>);
+}
+
 TEST_F(SortTest, InsertionSort) {
     TestSortFunc(InsertionSort<It>);
 }
