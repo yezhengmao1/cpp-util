@@ -20,5 +20,4 @@ void TreeTest::TearDownTestCase() {
 }
 
 TEST_F(TreeTest, Node) {
-    tree_node_t<int> node;
 }

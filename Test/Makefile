@@ -5,6 +5,7 @@ CFLAGS := -std=c++11 -g --coverage
 LDFLAGS := -lgtest -lpthread
 # 头文件
 INCLUDE = -I /usr/local/include \
+		  -I ../STL \
           -I ../Sort \
 		  -I ../Tree \
 		  -I ../String \
@@ -20,13 +21,19 @@ TARGET_STRING := test_string
 TEST_TREE := test_tree.cpp
 TARGET_TREE := test_tree
 
-all: sort tree
+TEST_ALLOCATOR := test_allocator.cpp
+TARGET_ALLOCATOR := test_allocator
+
+all: sort tree allocator
 
 sort:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_SORT) $(TEST_MAIN) $(TEST_SORT) $(LDFLAGS)
 
 tree:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_TREE) $(TEST_MAIN) $(TEST_TREE) $(LDFLAGS)
+
+allocator:
+	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_ALLOCATOR) $(TEST_MAIN) $(TEST_ALLOCATOR) $(LDFLAGS)
 
 lcov:
 	@gcov *.gcda
@@ -36,6 +43,9 @@ lcov:
 
 .PHONY : clean
 clean:
+	@rm $(TARGET_SORT)
+	@rm $(TARGET_TREE)
+	@rm $(TARGET_ALLOCATOR)
 	@rm *.gcno
 	@rm *.gcda
 	@rm *.gcov
