@@ -18,7 +18,7 @@ TARGET_SORT := test_sort
 TEST_STRING := test_string.cpp
 TARGET_STRING := test_string
 
-TEST_TREE := test_tree.cpp
+TEST_TREE := test_tree.cpp ../Tree/RBTree.cpp
 TARGET_TREE := test_tree
 
 TEST_ALLOCATOR := test_allocator.cpp
