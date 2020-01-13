@@ -1,7 +1,8 @@
 #ifndef RBTREE_H_
 #define RBTREE_H_
 
-#include <memory> // addressof
+#include <memory>
+#include <iterator>
 
 namespace Tree {
 
@@ -73,9 +74,128 @@ const RBTreeNodeBase* decrement(const RBTreeNodeBase *) noexcept;
 
 template<typename T>
 struct RBTreeIterator {
+    typedef T  value_type;
+    typedef T* pointer;
+    typedef T& reference;
+
+    typedef std::bidirectional_iterator_tag iterator_category;
+    typedef ptrdiff_t                       difference_type;
+    typedef size_t                          size_type;
+
+    typedef RBTreeNodeBase*   BasePtr;
+    typedef RBTreeNode<T>*    NodePtr;
+    typedef RBTreeIterator<T> Self;
+    
+    BasePtr node_;
+
+    RBTreeIterator() : node_() {}
+    explicit RBTreeIterator(BasePtr& node) : node_(node) {}
+
+    reference operator*() {
+        return *static_cast<NodePtr>(node_)->ValPtr();
+    }
+
+    pointer operator->() {
+        return static_cast<NodePtr>(node_)->ValPtr();
+    }
+
+    Self& operator++() {
+        node_ = increment(node_);
+        return *this;
+    }
+
+    Self operator++(int) {
+        Self tmp = *this;
+        node_ = increment(node_);
+        return tmp;
+    }
+
+    Self& operator--() {
+        node_ = decrement(node_);
+        return *this;
+    }
+
+    Self operator--(int) {
+        Self tmp = *this;
+        node_ = decrement(node_);
+        return tmp;
+    }
+
+    bool operator==(const Self& l) const {
+        return l.node_ == this->node_;
+    }
+
+    bool operator!=(const Self& l) const {
+        return l.node_ != this->node_;
+    }
+};
+
+template<typename T>
+struct RBTreeConstIterator {
+    typedef T  value_type;
+    typedef const T* pointer;
+    typedef const T& reference;
+
+    typedef std::bidirectional_iterator_tag iterator_category;
+    typedef ptrdiff_t                       difference_type;
+    typedef size_t                          size_type;
+
+    typedef RBTreeNodeBase*         BasePtr;
+    typedef const RBTreeNode<T>*    NodePtr;
+    typedef RBTreeConstIterator<T>  Self;
+
+    typedef RBTreeIterator<T> Iterator;
+    
+    BasePtr node_;
+
+    RBTreeConstIterator() : node_() {}
+    explicit RBTreeConstIterator(BasePtr& node) : node_(node) {}
+
+    Iterator ConstCast() const {
+        auto t = const_cast<typename Iterator::BasePtr>(node_);
+        return Iterator(t);
+    }
+
+    reference operator*() const {
+        return *static_cast<NodePtr>(node_)->ValPtr();
+    }
+
+    pointer operator->() const {
+        return static_cast<NodePtr>(node_)->ValPtr();
+    }
+
+    Self& operator++() {
+        node_ = increment(node_);
+        return *this;
+    }
+
+    Self operator++(int) {
+        Self tmp = *this;
+        node_ = increment(node_);
+        return tmp;
+    }
+
+    Self& operator--() {
+        node_ = decrement(node_);
+        return *this;
+    }
+
+    Self operator--(int) {
+        Self tmp = *this;
+        node_ = decrement(node_);
+        return tmp;
+    }
+
+    bool operator==(const Self& l) const {
+        return l.node_ == this->node_;
+    }
+
+    bool operator!=(const Self& l) const {
+        return l.node_ != this->node_;
+    }
 };
 
 
-} // end of Tree namespace 
+} // end of namespace Tree
 
 #endif

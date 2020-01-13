@@ -8,6 +8,10 @@
 using namespace Tree;
 using namespace std;
 
+typedef RBTreeNode<int>* NodePtr;
+typedef RBTreeNodeBase* BasePtr;
+typedef const RBTreeNodeBase* ConstBasePtr;
+
 class TreeTest : public ::testing::Test {
 protected:
     virtual void SetUp() {}
@@ -15,26 +19,18 @@ protected:
 public:
     static void SetUpTestCase();
     static void TearDownTestCase();
+
+    static map<int, BasePtr> test_case;
+    static map<int, ConstBasePtr> test_const_case;
+    static RBTreeHeader header;
 };
 
+map<int,BasePtr> TreeTest::test_case;
+map<int, ConstBasePtr> TreeTest::test_const_case;
+RBTreeHeader TreeTest::header;
+
 void TreeTest::SetUpTestCase() {
-
-}
-
-void TreeTest::TearDownTestCase() {
-
-}
-
-TEST_F(TreeTest, RBTreeNodeIncDec) {
     // 数据准备
-    typedef RBTreeNode<int>* NodePtr;
-    typedef RBTreeNodeBase* BasePtr;
-    typedef const RBTreeNodeBase* ConstBasePtr;
-
-    map<int, BasePtr> test_case;
-    map<int, ConstBasePtr> test_const_case;
-    RBTreeHeader header;
-
     for(int i = 1; i <= 7; i++) {
         NodePtr node = new RBTreeNode<int>();
         node->val_ = i;
@@ -64,7 +60,13 @@ TEST_F(TreeTest, RBTreeNodeIncDec) {
     ADDRIGHT(2, 3);
     ADDLEFT(6, 5);
     ADDRIGHT(6, 7);
-    
+}
+
+void TreeTest::TearDownTestCase() {
+
+}
+
+TEST_F(TreeTest, RBTreeNode) {
     auto end_pos = &(header.headerNode_);
     ConstBasePtr const_end_pos = &(header.headerNode_);
     
@@ -83,4 +85,63 @@ TEST_F(TreeTest, RBTreeNodeIncDec) {
         ASSERT_EQ(increment(test_case[i]), test_case[i+1]);
         ASSERT_EQ(increment(test_const_case[i]), test_case[i+1]);
     }
+}
+
+TEST_F(TreeTest, RBTreeIterator) {
+    typedef struct TestStruct {
+        int x;
+        int y;
+    } TestStruct;
+    RBTreeNode<TestStruct>* vnode = new RBTreeNode<TestStruct>();
+    RBTreeNodeBase* node = vnode;
+    vnode->val_.x = 1; 
+    vnode->val_.y = 2;
+    Tree::RBTreeIterator<TestStruct> s_it(node);
+    ASSERT_EQ(s_it->x, 1);
+    ASSERT_EQ(s_it->y, 2);
+
+    BasePtr end_pos = &(header.headerNode_);
+
+    typedef Tree::RBTreeIterator<int> Iterator;
+
+    Iterator begin(test_case[1]);
+    Iterator end(end_pos);
+
+    // ++ test
+    auto inc = begin;
+    int ans = 1;
+    ASSERT_EQ(true, inc == begin);
+    ASSERT_EQ(true, inc != end);
+    while(inc != end) {
+        ASSERT_EQ(ans++, *(inc++));
+    }
+    // -- test
+    auto dec = --end;
+    ans = 7;
+    while(dec != end) {
+        ASSERT_EQ(ans--, *(dec--));
+    }
+    // const test
+    typedef Tree::RBTreeConstIterator<int> ConstIterator;
+    ConstIterator cbegin(test_case[1]);
+    ConstIterator cend(end_pos);
+    ASSERT_EQ(*cbegin, 1);
+    auto kase = begin;
+    *kase = 10;
+    ASSERT_EQ(((NodePtr)kase.node_)->val_, 10);
+    ASSERT_EQ(*cbegin, 10);
+    (*kase)--;
+    ASSERT_EQ(((NodePtr)kase.node_)->val_, 9);
+    ASSERT_EQ(*cbegin, 9);
+    *kase = 1;
+    ASSERT_EQ(((NodePtr)begin.node_)->val_, 1);
+    ASSERT_EQ(*cbegin, 1);
+    cbegin++;
+    ASSERT_EQ(*++cbegin, 3);
+    ASSERT_EQ(*--cbegin, 2);
+    ASSERT_EQ(*cbegin++, 2);
+    ASSERT_EQ(*cbegin--, 3);
+    ASSERT_EQ(*cbegin, 2);
+    *(cbegin.ConstCast()) = 10;
+    ASSERT_EQ(*cbegin, 10);
 }
