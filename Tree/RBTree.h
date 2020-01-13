@@ -1,6 +1,8 @@
 #ifndef RBTREE_H_
 #define RBTREE_H_
 
+#include <memory> // addressof
+
 namespace Tree {
 
 enum RBTreeColor {Red = true, Black = false};
@@ -65,9 +67,9 @@ struct RBTreeHeader {
 };
 
 RBTreeNodeBase* increment(RBTreeNodeBase *) noexcept;
-RBTreeNodeBase* increment(const RBTreeNodeBase *) noexcept;
+const RBTreeNodeBase* increment(const RBTreeNodeBase *) noexcept;
 RBTreeNodeBase* decrement(RBTreeNodeBase *) noexcept;
-RBTreeNodeBase* decrement(const RBTreeNodeBase *) noexcept;
+const RBTreeNodeBase* decrement(const RBTreeNodeBase *) noexcept;
 
 template<typename T>
 struct RBTreeIterator {
