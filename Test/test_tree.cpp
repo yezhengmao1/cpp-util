@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "Tree.h"
+#include "RBTree.h"
+#include "MallocAllocator.h"
 
 class TreeTest : public ::testing::Test {
 protected:
@@ -19,5 +20,10 @@ void TreeTest::TearDownTestCase() {
 
 }
 
-TEST_F(TreeTest, Node) {
+TEST_F(TreeTest, RBTreeNode) {
+    auto node = Tree::RBTreeNode<int>();
+    node.val_ = 100;
+    auto ptr = node.ValPtr();
+    std::cout << ptr << std::endl;
+    std::cout << *ptr << std::endl;
 }
