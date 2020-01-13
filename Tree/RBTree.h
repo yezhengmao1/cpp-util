@@ -8,6 +8,7 @@ namespace Tree {
 
 enum RBTreeColor {Red = true, Black = false};
 
+// basenode - 不包含数据
 struct RBTreeNodeBase {
     typedef RBTreeNodeBase*        NodePtr;
     typedef const RBTreeNodeBase*  ConstNodePtr;
@@ -18,6 +19,7 @@ struct RBTreeNodeBase {
     NodePtr right_;
 };
 
+// node - 包含数据
 template<typename T>
 struct RBTreeNode : public RBTreeNodeBase {
     T val_;
@@ -25,25 +27,27 @@ struct RBTreeNode : public RBTreeNodeBase {
     T* ValPtr() {
         return std::addressof(val_);
     }
+
     const T* ValPtr() const {
         return std::addressof(val_);
     }
 };
 
+// 特殊header节点
 struct RBTreeHeader {
     RBTreeNodeBase headerNode_;
     size_t nodeCount_;
-    /* constructor */
+
     RBTreeHeader() noexcept {
-        headerNode_.color_ = RBTreeColor::Red;
+        headerNode_.color_ = Red;
         reset();
     };
-    /* move constructor */
+
     RBTreeHeader(RBTreeHeader &&val) noexcept {
         if(val.headerNode_.parent_ != nullptr) {
             move(val);
         }else {
-            headerNode_.color_ = RBTreeColor::Red;
+            headerNode_.color_ = Red;
             reset();
         }
     };
@@ -67,11 +71,13 @@ struct RBTreeHeader {
     }
 };
 
+// 节点操作
 RBTreeNodeBase* increment(RBTreeNodeBase *) noexcept;
 const RBTreeNodeBase* increment(const RBTreeNodeBase *) noexcept;
 RBTreeNodeBase* decrement(RBTreeNodeBase *) noexcept;
 const RBTreeNodeBase* decrement(const RBTreeNodeBase *) noexcept;
 
+// 迭代器
 template<typename T>
 struct RBTreeIterator {
     typedef T  value_type;
@@ -89,7 +95,7 @@ struct RBTreeIterator {
     BasePtr node_;
 
     RBTreeIterator() : node_() {}
-    explicit RBTreeIterator(BasePtr& node) : node_(node) {}
+    explicit RBTreeIterator(BasePtr node) : node_(node) {}
 
     reference operator*() {
         return *static_cast<NodePtr>(node_)->ValPtr();
@@ -130,6 +136,7 @@ struct RBTreeIterator {
     }
 };
 
+// const 迭代器
 template<typename T>
 struct RBTreeConstIterator {
     typedef T  value_type;
@@ -149,11 +156,10 @@ struct RBTreeConstIterator {
     BasePtr node_;
 
     RBTreeConstIterator() : node_() {}
-    explicit RBTreeConstIterator(BasePtr& node) : node_(node) {}
+    explicit RBTreeConstIterator(BasePtr node) : node_(node) {}
 
     Iterator ConstCast() const {
-        auto t = const_cast<typename Iterator::BasePtr>(node_);
-        return Iterator(t);
+        return Iterator(const_cast<typename Iterator::BasePtr>(node_));
     }
 
     reference operator*() const {

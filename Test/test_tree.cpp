@@ -93,10 +93,9 @@ TEST_F(TreeTest, RBTreeIterator) {
         int y;
     } TestStruct;
     RBTreeNode<TestStruct>* vnode = new RBTreeNode<TestStruct>();
-    RBTreeNodeBase* node = vnode;
+    Tree::RBTreeIterator<TestStruct> s_it(vnode);
     vnode->val_.x = 1; 
     vnode->val_.y = 2;
-    Tree::RBTreeIterator<TestStruct> s_it(node);
     ASSERT_EQ(s_it->x, 1);
     ASSERT_EQ(s_it->y, 2);
 
