@@ -9,6 +9,7 @@ using namespace Tree;
 using namespace std;
 
 typedef RBTreeNode<int>* NodePtr;
+typedef const RBTreeNode<int>* ConstNodePtr;
 typedef RBTreeNodeBase* BasePtr;
 typedef const RBTreeNodeBase* ConstBasePtr;
 
@@ -20,17 +21,16 @@ public:
     static void SetUpTestCase();
     static void TearDownTestCase();
 
-    static map<int, BasePtr> test_case;
-    static map<int, ConstBasePtr> test_const_case;
+    static map<int, NodePtr> test_case;
+    static map<int, ConstNodePtr> test_const_case;
     static RBTreeHeader header;
 };
 
-map<int,BasePtr> TreeTest::test_case;
-map<int, ConstBasePtr> TreeTest::test_const_case;
+map<int, NodePtr> TreeTest::test_case;
+map<int, ConstNodePtr> TreeTest::test_const_case;
 RBTreeHeader TreeTest::header;
 
 void TreeTest::SetUpTestCase() {
-    // 数据准备
     for(int i = 1; i <= 7; i++) {
         NodePtr node = new RBTreeNode<int>();
         node->val_ = i;
@@ -92,20 +92,22 @@ TEST_F(TreeTest, RBTreeIterator) {
         int x;
         int y;
     } TestStruct;
+    typedef RBTreeIterator<TestStruct> StructIterator;
+
     RBTreeNode<TestStruct>* vnode = new RBTreeNode<TestStruct>();
-    Tree::RBTreeIterator<TestStruct> s_it(vnode);
+    StructIterator s_it(vnode);
     vnode->val_.x = 1; 
     vnode->val_.y = 2;
     ASSERT_EQ(s_it->x, 1);
     ASSERT_EQ(s_it->y, 2);
 
-    BasePtr end_pos = &(header.headerNode_);
+    auto end_pos = &(header.headerNode_);
 
-    typedef Tree::RBTreeIterator<int> Iterator;
+    typedef Tree::RBTreeIterator<int>::iterator Iterator;
+    typedef Tree::RBTreeIterator<int>::const_iterator ConstIterator;
 
     Iterator begin(test_case[1]);
     Iterator end(end_pos);
-
     // ++ test
     auto inc = begin;
     int ans = 1;
@@ -121,7 +123,6 @@ TEST_F(TreeTest, RBTreeIterator) {
         ASSERT_EQ(ans--, *(dec--));
     }
     // const test
-    typedef Tree::RBTreeConstIterator<int> ConstIterator;
     ConstIterator cbegin(test_case[1]);
     ConstIterator cend(end_pos);
     ASSERT_EQ(*cbegin, 1);
@@ -141,6 +142,4 @@ TEST_F(TreeTest, RBTreeIterator) {
     ASSERT_EQ(*cbegin++, 2);
     ASSERT_EQ(*cbegin--, 3);
     ASSERT_EQ(*cbegin, 2);
-    *(cbegin.ConstCast()) = 10;
-    ASSERT_EQ(*cbegin, 10);
 }
