@@ -66,6 +66,28 @@ void TreeTest::TearDownTestCase() {
 
 }
 
+void InsertNodeInt(NodePtr node, Tree::RBTreeHeader &header) {
+    BasePtr &root = header.headerNode_.parent_;
+    NodePtr loop = (NodePtr)root;
+    while(true) {
+        if(node->val_ > loop->val_) {
+            if(loop->left_ == nullptr) break;
+            loop = (NodePtr)loop->left_;
+        }else {
+            if(loop->right_ == nullptr) break;
+            loop = (NodePtr)loop->right_;
+        }
+    }
+    node->parent_ = loop;
+    if(node->val_ >= loop->val_) {
+        loop->right_ = node;
+    }else {
+        loop->left_ = node;
+    }
+
+    RBTreeRebalanceForInsert(node, header.headerNode_);
+}
+
 TEST_F(TreeTest, RBTreeIterator) {
     typedef struct TestStruct {
         int x;
@@ -121,4 +143,43 @@ TEST_F(TreeTest, RBTreeIterator) {
     ASSERT_EQ(*cbegin++, 2);
     ASSERT_EQ(*cbegin--, 3);
     ASSERT_EQ(*cbegin, 2);
+}
+
+TEST_F(TreeTest, BalanceForInsert) {
+    Tree::RBTreeHeader header;
+
+    typedef Tree::RBTreeNode<int>* NodePtr;
+    typedef Tree::RBTreeNodeBase*  BasePtr;
+
+    NodePtr node = new Tree::RBTreeNode<int>();
+    node->color_ = Tree::Black;
+    node->val_ = 5;
+    node->left_ = nullptr;
+    node->right_ = nullptr;
+    node->parent_ = &(header.headerNode_);
+    header.headerNode_.parent_ = node;
+    
+    vector<int> test_case = {9, 1, 6, 4, 2, 7, 6, 8, 3};
+    for(auto i : test_case) {
+        NodePtr n = new Tree::RBTreeNode<int>();
+        n->val_ = i;
+        n->left_ = n->right_ = n->parent_ = nullptr;
+        InsertNodeInt(n, header);
+        if(i == 1) {
+            header.headerNode_.left_ = n;
+        }else if(i == 9) {
+            header.headerNode_.right_ = n;
+        }
+    }
+
+    typedef Tree::RBTreeIterator<int>::iterator Iterator;
+    typedef Tree::RBTreeIterator<int>::const_iterator ConstIterator;
+    
+    ConstIterator cbegin(header.headerNode_.left_);
+    ConstIterator cend(&header.headerNode_);
+    auto it = cbegin;
+    while(it != cend) {
+        cout << *it << endl;
+        it++;
+    }
 }

@@ -112,6 +112,60 @@ inline void RBTreeRotateRight(RBTreeNodeBase* x, RBTreeNodeBase* &root) {
     y->right_ = x;
 }
 
+/* 插入节点x后重新调整平衡 */
+inline void RBTreeRebalanceForInsert(RBTreeNodeBase* x,
+                                     RBTreeNodeBase &headerNode) {
+    x->color_ = Red;
+    RBTreeNodeBase* &root = headerNode.parent_;
+
+    while(x != root && x->parent_->color_ == Red) {
+        if(x->parent_ == x->parent_->parent_->left_) {
+            RBTreeNodeBase* y = x->parent_->parent_->right_;
+            if(y && y->color_ == Red) {
+                x->parent_->color_ = Black;
+                y->color_ = Black;
+                x->parent_->parent_->color_ = Red;
+                x = x->parent_->parent_;
+            }else {
+                if(x == x->parent_->right_) {
+                    x = x->parent_;
+                    RBTreeRotateLeft(x, root);
+                }
+                x->parent_->color_ = Black;
+                x->parent_->parent_->color_ = Red;
+                RBTreeRotateRight(x->parent_->parent_, root);
+            }
+        }else {
+            RBTreeNodeBase* y = x->parent_->parent_->left_;
+            if(y && y->color_ == Red) {
+                x->parent_->color_ = Black;
+                y->color_ = Black;
+                x->parent_->parent_->color_ = Red;
+                x = x->parent_->parent_;
+            }else {
+                if(x == x->parent_->left_) {
+                    x = x->parent_;
+                    RBTreeRotateRight(x, root);
+                }
+                x->parent_->color_ = Black;
+                x->parent_->parent_->color_ = Red;
+                RBTreeRotateLeft(x->parent_->parent_, root);
+            }
+        }
+    }
+    
+    root->color_ = Black;
+}
+
+/* 删除节点x后重新调整平衡 */
+inline RBTreeNodeBase* RBTreeRebalanceForErase(RBTreeNodeBase* const x, 
+                                               RBTreeNodeBase &headerNode) {
+    RBTreeNodeBase* &root = headerNode.parent_;
+    RBTreeNodeBase* &leftmost = headerNode.left_;
+    RBTreeNodeBase* &rightmost = headerNode.right_;
+    return nullptr;
+}
+
 struct RBTreeIteratorBase {
     typedef RBTreeNodeBase* BasePtr;
 
