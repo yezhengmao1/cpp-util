@@ -163,21 +163,20 @@ TEST_F(TreeTest, BalanceForInsert) {
 
     NodePtr node = new Tree::RBTreeNode<int>();
     node->color_ = Tree::Black;
-    node->val_ = 5;
+    node->val_ = 1;
     node->left_ = nullptr;
     node->right_ = nullptr;
     node->parent_ = &(header.headerNode_);
     header.headerNode_.parent_ = node;
+    header.headerNode_.left_ = node;
     
-    vector<int> test_case = {9, 1, 4, 2, 7, 6, 8, 3};
+    vector<int> test_case = {9, 5, 4, 2, 7, 6, 8, 3};
     for(auto i : test_case) {
         NodePtr n = new Tree::RBTreeNode<int>();
         n->val_ = i;
         n->left_ = n->right_ = n->parent_ = nullptr;
         InsertNodeInt(n, header);
-        if(i == 1) {
-            header.headerNode_.left_ = n;
-        }else if(i == 9) {
+        if(i == 9) {
             header.headerNode_.right_ = n;
         }
     }
