@@ -66,11 +66,21 @@ void TreeTest::TearDownTestCase() {
 
 }
 
+void ShowTree(NodePtr node, int level = 0) {
+    if(node == nullptr) return;
+    for(int i = 0; i < level; ++i) {
+        cout << "  ";
+    }
+    cout << node->val_ << endl;
+    ShowTree((NodePtr)node->left_, level+1);
+    ShowTree((NodePtr)node->right_, level+1);
+}
+
 void InsertNodeInt(NodePtr node, Tree::RBTreeHeader &header) {
     BasePtr &root = header.headerNode_.parent_;
     NodePtr loop = (NodePtr)root;
     while(true) {
-        if(node->val_ > loop->val_) {
+        if(node->val_ < loop->val_) {
             if(loop->left_ == nullptr) break;
             loop = (NodePtr)loop->left_;
         }else {
@@ -159,7 +169,7 @@ TEST_F(TreeTest, BalanceForInsert) {
     node->parent_ = &(header.headerNode_);
     header.headerNode_.parent_ = node;
     
-    vector<int> test_case = {9, 1, 6, 4, 2, 7, 6, 8, 3};
+    vector<int> test_case = {9, 1, 4, 2, 7, 6, 8, 3};
     for(auto i : test_case) {
         NodePtr n = new Tree::RBTreeNode<int>();
         n->val_ = i;
@@ -178,8 +188,8 @@ TEST_F(TreeTest, BalanceForInsert) {
     ConstIterator cbegin(header.headerNode_.left_);
     ConstIterator cend(&header.headerNode_);
     auto it = cbegin;
+    int cmp = 1;
     while(it != cend) {
-        cout << *it << endl;
-        it++;
+        ASSERT_EQ(cmp++, *it++);
     }
 }
