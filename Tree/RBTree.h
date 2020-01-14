@@ -71,6 +71,47 @@ struct RBTreeHeader {
     }
 };
 
+inline void RBTreeRotateLeft(RBTreeNodeBase* x, RBTreeNodeBase* &root) {
+    RBTreeNodeBase* const y = x->right_;
+
+    x->right_ = y->left_;
+    if(y->left_ != nullptr) {
+        y->left_->parent_ = x;
+    }
+
+    y->parent_ = x->parent_;
+    if(x == root) {
+        root = y;
+    }else if(x == x->parent_->left_) {
+        x->parent_->left_ = y;
+    }else {
+        x->parent_->right_ = y;
+    }
+
+    x->parent_ = y;
+    y->left_ = x;
+}
+
+inline void RBTreeRotateRight(RBTreeNodeBase* x, RBTreeNodeBase* &root) {
+    RBTreeNodeBase* const y = x->left_;
+    x->left_ = y->right_;
+    if(y->right_ != nullptr) {
+        y->right_->parent_ = x;
+    }
+
+    y->parent_ = x->parent_;
+    if(x == root) {
+        root = x;
+    }else if(x == x->parent_->left_) {
+        x->parent_->left_ = y;
+    }else {
+        x->parent_->right_ = y;
+    }
+
+    x->parent_ = y;
+    y->right_ = x;
+}
+
 struct RBTreeIteratorBase {
     typedef RBTreeNodeBase* BasePtr;
 
