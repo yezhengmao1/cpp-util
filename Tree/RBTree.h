@@ -71,12 +71,6 @@ struct RBTreeHeader {
     }
 };
 
-// 节点操作
-RBTreeNodeBase* increment(RBTreeNodeBase *) noexcept;
-const RBTreeNodeBase* increment(const RBTreeNodeBase *) noexcept;
-RBTreeNodeBase* decrement(RBTreeNodeBase *) noexcept;
-const RBTreeNodeBase* decrement(const RBTreeNodeBase *) noexcept;
-
 struct RBTreeIteratorBase {
     typedef RBTreeNodeBase* BasePtr;
 
@@ -85,6 +79,43 @@ struct RBTreeIteratorBase {
     typedef size_t                          size_type;
 
     BasePtr node_;
+
+    void increment() {
+        if(node_->right_ != nullptr) {
+            node_ = node_->right_;
+            while(node_->left_ != nullptr) {
+                node_ = node_->left_;
+            }
+        }else {
+            BasePtr y = node_->parent_;
+            while(node_ == y->right_) {
+                node_ = y;
+                y = y->parent_;
+            }
+            if(node_->right_ != y) {
+                node_ = y;
+            }
+        }
+    }
+
+    void decrement() {
+        if(node_->color_ == Red && 
+           node_->parent_->parent_ == node_) {
+            node_ = node_->right_;
+        }else if(node_->left_ != nullptr) {
+            node_ = node_->left_;
+            while(node_->right_ != nullptr) {
+                node_ = node_->right_;
+            }
+        }else {
+            BasePtr y = node_->parent_;
+            while(node_ == y->left_) {
+                node_ = y;
+                y = y->parent_;
+            }
+            node_ = y;
+        }
+    }
 };
 
 // 迭代器
@@ -115,24 +146,24 @@ struct RBTreeIterator : public RBTreeIteratorBase {
     }
 
     Self& operator++() {
-        node_ = increment(node_);
+        increment();
         return *this;
     }
 
     Self operator++(int) {
         Self tmp = *this;
-        node_ = increment(node_);
+        increment();
         return tmp;
     }
 
     Self& operator--() {
-        node_ = decrement(node_);
+        decrement();
         return *this;
     }
 
     Self operator--(int) {
         Self tmp = *this;
-        node_ = decrement(node_);
+        decrement();
         return tmp;
     }
 };

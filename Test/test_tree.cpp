@@ -66,27 +66,6 @@ void TreeTest::TearDownTestCase() {
 
 }
 
-TEST_F(TreeTest, RBTreeNode) {
-    auto end_pos = &(header.headerNode_);
-    ConstBasePtr const_end_pos = &(header.headerNode_);
-    
-    ASSERT_EQ(end_pos, decrement(test_case[1]));
-    ASSERT_EQ(const_end_pos, decrement(test_const_case[1]));
-    ASSERT_EQ(decrement(end_pos), test_case[7]);
-    ASSERT_EQ(decrement(const_end_pos), test_case[7]);
-
-    for(int i = 2; i <= 7; ++i) {
-        ASSERT_EQ(decrement(test_case[i]), test_case[i-1]);
-        ASSERT_EQ(decrement(test_const_case[i]), test_case[i-1]);
-    }
-    ASSERT_EQ(end_pos, increment(test_case[7]));
-    ASSERT_EQ(end_pos, increment(test_const_case[7]));
-    for(int i = 1; i < 7; i++) {
-        ASSERT_EQ(increment(test_case[i]), test_case[i+1]);
-        ASSERT_EQ(increment(test_const_case[i]), test_case[i+1]);
-    }
-}
-
 TEST_F(TreeTest, RBTreeIterator) {
     typedef struct TestStruct {
         int x;
