@@ -31,38 +31,45 @@ using true_type = bool_constant<true>;
 using false_type = bool_constant<false>;
 
 // 类型关系
-template<typename T, typename U>
-struct is_same : public false_type {};
-template<typename T>
-struct is_same<T, T> : public true_type {};
+template<typename T, typename U> struct is_same : false_type {};
+template<typename T> struct is_same<T, T> : true_type {};
 
 // const-volatile 说明符操作
-template<typename T>
-struct remove_const { using type = T; };
-template<typename T>
-struct remove_const<const T> { using type = T; };
-template<typename T>
-struct remove_volatile { using type = T; };
-template<typename T>
-struct remove_volatile<volatile T> { using type = T; };
-template<typename T>
-struct add_const { using type = const T; };
-template<typename T>
-struct add_volatile { using type = volatile T; };
+template<typename T> struct remove_const { using type = T; };
+template<typename T> struct remove_const<const T> { using type = T; };
+template<typename T> struct remove_volatile { using type = T; };
+template<typename T> struct remove_volatile<volatile T> { using type = T; };
+template<typename T> struct add_const { using type = const T; };
+template<typename T> struct add_volatile { using type = volatile T; };
 
-template<typename T>
-struct remove_cv { 
-    using type = typename remove_volatile<typename remove_const<T>::type>::type; 
-};
-
-template<typename T>
-struct add_cv {
-    using type = typename add_volatile<typename add_const<T>::type>::type;
-};
+template<typename T> struct remove_cv { using type = typename remove_volatile<typename remove_const<T>::type>::type; };
+template<typename T> struct add_cv { using type = typename add_volatile<typename add_const<T>::type>::type; };
 
 // 基本类型判断
-template<typename T>
-struct is_void : public is_same<void, typename remove_cv<T>::type> { };
+
+// void / const void / const volatile void
+template<typename T> struct is_void : is_same<void, typename remove_cv<T>::type> {};
+// std::nullptr_t // const std::nullptr_t // const volatile std::nullptr_t
+template<typename T> struct is_null_pointer : is_same<std::nullptr_t, typename remove_cv<T>::type> {};
+// T* / const T* / const volatile T* not include U::T*
+template<typename T> struct is_pointer_helper : false_type {};
+template<typename T> struct is_pointer_helper<T*> : true_type {};
+template<typename T> struct is_pointer : is_pointer_helper<typename remove_cv<T>::type> {};
+// T&
+template<typename T> struct is_lvalue_reference : false_type {};
+template<typename T> struct is_lvalue_reference<T&> : true_type {};
+// T&&
+template<typename T> struct is_rvalue_reference : false_type {};
+template<typename T> struct is_rvalue_reference<T&&> : true_type {};
+// T& / T&&
+template<typename T> struct is_reference : bool_constant<is_lvalue_reference<T>::value ||
+                                                         is_rvalue_reference<T>::value> {};
+// float / double / long double 
+template<typename T> struct is_floating_point : bool_constant<is_same<float, typename remove_cv<T>::type>::value ||
+                                                              is_same<double, typename remove_cv<T>::type>::value ||
+                                                              is_same<long double, typename remove_cv<T>::type>::value> {};
+
+// 复合类型判断
 
 } // STL
 

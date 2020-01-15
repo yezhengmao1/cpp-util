@@ -21,6 +21,12 @@ void TestTypeTraits::TearDownTestCase() {
 
 }
 
+struct TestClass {
+    int A;
+    int* B;
+    int Func() { return 1; }
+};
+
 int func(integral_constant<int, 1>::type) { return 1; }
 int func(integral_constant<int, 2>::type) { return 2; }
 
@@ -119,4 +125,52 @@ TEST_F(TestTypeTraits, IsVoid) {
     ASSERT_EQ(true, is_void<const void>::value);
     ASSERT_EQ(true, is_void<const volatile void>::value);
     ASSERT_EQ(false, is_void<int>::value);
+}
+
+TEST_F(TestTypeTraits, IsReference) {
+    ASSERT_EQ(false, is_lvalue_reference<TestClass>::value);
+    ASSERT_EQ(true, is_lvalue_reference<TestClass&>::value);
+    ASSERT_EQ(false, is_lvalue_reference<TestClass&&>::value);
+    ASSERT_EQ(false, is_lvalue_reference<int>::value);
+    ASSERT_EQ(true, is_lvalue_reference<int&>::value);
+    ASSERT_EQ(false, is_lvalue_reference<int&&>::value);
+
+    ASSERT_EQ(false, is_rvalue_reference<TestClass>::value);
+    ASSERT_EQ(false, is_rvalue_reference<TestClass&>::value);
+    ASSERT_EQ(true, is_rvalue_reference<TestClass&&>::value);
+    ASSERT_EQ(false, is_rvalue_reference<int>::value);
+    ASSERT_EQ(false, is_rvalue_reference<int&>::value);
+    ASSERT_EQ(true, is_rvalue_reference<int&&>::value);
+
+    ASSERT_EQ(false, is_reference<TestClass>::value);
+    ASSERT_EQ(true, is_reference<TestClass&>::value);
+    ASSERT_EQ(true, is_reference<TestClass&&>::value);
+    ASSERT_EQ(false, is_reference<int>::value);
+    ASSERT_EQ(true, is_reference<int&>::value);
+    ASSERT_EQ(true, is_reference<int&&>::value);
+}
+
+TEST_F(TestTypeTraits, IsPtr) {
+    typedef int (*fun_ptr)(int, int);
+    ASSERT_EQ(true, is_pointer<void*>::value);
+    ASSERT_EQ(true, is_pointer<const void*>::value);
+    ASSERT_EQ(true, is_pointer<volatile const void*>::value);
+    ASSERT_EQ(true, is_pointer<volatile void* const>::value);
+    ASSERT_EQ(true, is_pointer<void**>::value);
+    ASSERT_EQ(true, is_pointer<fun_ptr>::value);
+    ASSERT_EQ(false, is_pointer<void>::value);
+    ASSERT_EQ(false, is_pointer<int[]>::value);
+    ASSERT_EQ(false, is_pointer<int[][10]>::value);
+    ASSERT_EQ(false, is_pointer<std::nullptr_t>::value);
+    ASSERT_EQ(false, is_pointer<decltype(&TestClass::B)>::value);
+}
+
+TEST_F(TestTypeTraits, IsMemberPtr) {
+}
+
+TEST_F(TestTypeTraits, IsNullPtr) {
+    ASSERT_EQ(true, is_null_pointer<std::nullptr_t>::value);
+    ASSERT_EQ(true, is_null_pointer<decltype(nullptr)>::value);
+    ASSERT_EQ(false, is_null_pointer<void*>::value);
+    ASSERT_EQ(false, is_null_pointer<int*>::value);
 }
