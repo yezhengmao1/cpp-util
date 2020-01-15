@@ -150,6 +150,16 @@ TEST_F(TestTypeTraits, IsReference) {
     ASSERT_EQ(true, is_reference<int&&>::value);
 }
 
+TEST_F(TestTypeTraits, IsFloatingPoint) {
+    ASSERT_EQ(true, is_floating_point<float>::value);
+    ASSERT_EQ(true, is_floating_point<const float>::value);
+    ASSERT_EQ(true, is_floating_point<volatile float>::value);
+    ASSERT_EQ(true, is_floating_point<const volatile float>::value);
+    ASSERT_EQ(true, is_floating_point<double>::value);
+    ASSERT_EQ(true, is_floating_point<long double>::value);
+    ASSERT_EQ(false, is_floating_point<float*>::value);
+}
+
 TEST_F(TestTypeTraits, IsPtr) {
     typedef int (*fun_ptr)(int, int);
     ASSERT_EQ(true, is_pointer<void*>::value);
