@@ -175,6 +175,29 @@ TEST_F(TestTypeTraits, IsPtr) {
     ASSERT_EQ(false, is_pointer<decltype(&TestClass::B)>::value);
 }
 
+TEST_F(TestTypeTraits, IsArray) {
+    ASSERT_EQ(false, is_bounded_array<TestClass>::value);
+    ASSERT_EQ(false, is_bounded_array<TestClass[]>::value);
+    ASSERT_EQ(true, is_bounded_array<TestClass[10]>::value);
+    ASSERT_EQ(false, is_bounded_array<int>::value);
+    ASSERT_EQ(false, is_bounded_array<int[]>::value);
+    ASSERT_EQ(true, is_bounded_array<int[10]>::value);
+
+    ASSERT_EQ(false, is_unbounded_array<TestClass>::value);
+    ASSERT_EQ(true, is_unbounded_array<TestClass[]>::value);
+    ASSERT_EQ(false, is_unbounded_array<TestClass[10]>::value);
+    ASSERT_EQ(false, is_unbounded_array<int>::value);
+    ASSERT_EQ(true, is_unbounded_array<int[]>::value);
+    ASSERT_EQ(false, is_unbounded_array<int[10]>::value);
+
+    ASSERT_EQ(false, is_array<TestClass>::value);
+    ASSERT_EQ(true, is_array<TestClass[]>::value);
+    ASSERT_EQ(true, is_array<TestClass[10]>::value);
+    ASSERT_EQ(false, is_array<int>::value);
+    ASSERT_EQ(true, is_array<int[]>::value);
+    ASSERT_EQ(true, is_array<int[10]>::value);
+}
+
 TEST_F(TestTypeTraits, IsMemberPtr) {
 }
 

@@ -68,6 +68,15 @@ template<typename T> struct is_reference : bool_constant<is_lvalue_reference<T>:
 template<typename T> struct is_floating_point : bool_constant<is_same<float, typename remove_cv<T>::type>::value ||
                                                               is_same<double, typename remove_cv<T>::type>::value ||
                                                               is_same<long double, typename remove_cv<T>::type>::value> {};
+// bounded array
+template<typename T> struct is_bounded_array : false_type {};
+template<typename T, std::size_t N> struct is_bounded_array<T[N]> : true_type {};
+// unbounded array
+template<typename T> struct is_unbounded_array : false_type {};
+template<typename T> struct is_unbounded_array<T[]> : true_type {};
+// array
+template<typename T> struct is_array : bool_constant<is_bounded_array<T>::value ||
+                                                     is_unbounded_array<T>::value> {};
 
 // 复合类型判断
 
