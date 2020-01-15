@@ -49,6 +49,23 @@ template<typename T> struct add_cv { using type = typename add_volatile<typename
 
 // void / const void / const volatile void
 template<typename T> struct is_void : is_same<void, typename remove_cv<T>::type> {};
+// bool / char / char8_t / char16_t / char32_t / wchar_t / short / int / long / long long 
+template<typename T> struct is_integral_helper : false_type {};
+template<> struct is_integral_helper<bool> : true_type {};
+template<> struct is_integral_helper<char> : true_type {};
+template<> struct is_integral_helper<signed char> : true_type {};
+template<> struct is_integral_helper<unsigned char> : true_type {};
+template<> struct is_integral_helper<char16_t> : true_type {};
+template<> struct is_integral_helper<wchar_t> : true_type {};
+template<> struct is_integral_helper<short> : true_type {};
+template<> struct is_integral_helper<unsigned short> : true_type {};
+template<> struct is_integral_helper<int> : true_type {};
+template<> struct is_integral_helper<unsigned int> : true_type {};
+template<> struct is_integral_helper<long> : true_type {};
+template<> struct is_integral_helper<unsigned long> : true_type {};
+template<> struct is_integral_helper<long long> : true_type {};
+template<> struct is_integral_helper<unsigned long long> : true_type {};
+template<typename T> struct is_integral : is_integral_helper<typename remove_cv<T>::type> {};
 // std::nullptr_t // const std::nullptr_t // const volatile std::nullptr_t
 template<typename T> struct is_null_pointer : is_same<std::nullptr_t, typename remove_cv<T>::type> {};
 // T* / const T* / const volatile T* not include U::T*

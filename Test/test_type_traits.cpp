@@ -198,6 +198,17 @@ TEST_F(TestTypeTraits, IsArray) {
     ASSERT_EQ(true, is_array<int[10]>::value);
 }
 
+TEST_F(TestTypeTraits, IsIntegral) {
+    ASSERT_EQ(false, is_integral<double>::value);
+    ASSERT_EQ(false, is_integral<int*>::value);
+    ASSERT_EQ(false, is_integral<TestClass>::value);
+    ASSERT_EQ(true, is_integral<int>::value);
+    ASSERT_EQ(true, is_integral<decltype('a')>::value);
+    ASSERT_EQ(true, is_integral<decltype(true)>::value);
+    ASSERT_EQ(true, is_integral<decltype(-100)>::value);
+    ASSERT_EQ(true, is_integral<signed int>::value);
+}
+
 TEST_F(TestTypeTraits, IsMemberPtr) {
 }
 
