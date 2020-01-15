@@ -54,6 +54,12 @@ template<typename T> struct remove_reference { using type = T; };
 template<typename T> struct remove_reference<T&> { using type = T; };
 template<typename T> struct remove_reference<T&&> { using type = T; };
 
+template<typename T> struct remove_pointer { using type = T; };
+template<typename T> struct remove_pointer<T*> { using type = T; };
+template<typename T> struct remove_pointer<T* const> { using type = T; };
+template<typename T> struct remove_pointer<T* volatile> { using type = T; };
+template<typename T> struct remove_pointer<T* const volatile> { using type = T; };
+
 // 基本类型判断
 // void / const void / const volatile void
 template<typename T> struct is_void : is_same<void, typename remove_cv<T>::type> {};
@@ -74,6 +80,8 @@ template<> struct is_integral_helper<unsigned long> : true_type {};
 template<> struct is_integral_helper<long long> : true_type {};
 template<> struct is_integral_helper<unsigned long long> : true_type {};
 template<typename T> struct is_integral : is_integral_helper<typename remove_cv<T>::type> {};
+// function
+template<typename T> struct is_function : bool_constant<!is_const<const T>::value> {};
 // std::nullptr_t // const std::nullptr_t // const volatile std::nullptr_t
 template<typename T> struct is_null_pointer : is_same<std::nullptr_t, typename remove_cv<T>::type> {};
 // T* / const T* / const volatile T* not include U::T*

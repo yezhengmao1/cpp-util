@@ -120,6 +120,23 @@ TEST_F(TestTypeTraits, AddCV) {
     ASSERT_EQ(add_cv<test_case>::type().fun(), 4);
 }
 
+TEST_F(TestTypeTraits, RemovePointer) {
+    std::vector<bool> truekase = {
+        is_same<int, remove_pointer<int*>::type>::value,
+        is_same<int, remove_pointer<int* const>::type>::value,
+        is_same<int, remove_pointer<int* volatile const>::type>::value,
+    };
+    std::vector<bool> falsekase = {
+        is_same<int, remove_pointer<const int*>::type>::value,
+    };
+    for(auto i : truekase) {
+        ASSERT_EQ(true, i);
+    }
+    for(auto i : falsekase) {
+        ASSERT_EQ(false, i);
+    }
+}
+
 TEST_F(TestTypeTraits, IsVoid) {
     ASSERT_EQ(true, is_void<void>::value);
     ASSERT_EQ(true, is_void<const void>::value);
