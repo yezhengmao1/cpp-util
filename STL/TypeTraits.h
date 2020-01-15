@@ -60,9 +60,9 @@ struct add_cv {
     using type = typename add_volatile<typename add_const<T>::type>::type;
 };
 
-
+// 基本类型判断
 template<typename T>
-struct is_void {};
+struct is_void : public is_same<void, typename remove_cv<T>::type> { };
 
 } // STL
 

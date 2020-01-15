@@ -113,3 +113,10 @@ TEST_F(TestTypeTraits, AddCV) {
     ASSERT_EQ(add_volatile<test_case>::type().fun(), 3);
     ASSERT_EQ(add_cv<test_case>::type().fun(), 4);
 }
+
+TEST_F(TestTypeTraits, IsVoid) {
+    ASSERT_EQ(true, is_void<void>::value);
+    ASSERT_EQ(true, is_void<const void>::value);
+    ASSERT_EQ(true, is_void<const volatile void>::value);
+    ASSERT_EQ(false, is_void<int>::value);
+}
