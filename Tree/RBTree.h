@@ -273,6 +273,40 @@ inline bool operator!=(const RBTreeIteratorBase& l,
     return l.node_ != r.node_;
 }
 
+template<typename Key, typename Value, typename KeyOfValue, 
+         typename Compare, typename Alloc = std::allocator<Value>>
+class RBTree {
+    typedef RBTreeNode<Value>* NodePtr;
+    typedef RBTreeNodeBase*    BasePtr;
+
+    struct ReuseOrAllocNode {
+        RBTree &t_;
+        BasePtr root_;
+        BasePtr nodes_;
+
+        ReuseOrAllocNode(RBTree& t) : 
+            t_(t),
+            root_(t.Root()),
+            nodes_(t.RightMost()) {
+            if(root_) {
+                
+            }else {
+                nodes_ = nullptr;
+            }
+        }
+
+        ReuseOrAllocNode(const ReuseOrAllocNode &) = delete;
+    };
+
+
+protected:
+    NodePtr& Root() { return header_.headerNode_.parent_; }
+    NodePtr& LeftMost() { return header_.headerNode_.left_; }
+    NodePtr& RightMost() { return header_.headerNode_.right_; }
+
+    RBTreeHeader header_;
+};
+
 } // end of namespace Tree
 
 #endif
