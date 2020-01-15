@@ -243,9 +243,16 @@ TEST_F(TestTypeTraits, IsFunction) {
 }
 
 TEST_F(TestTypeTraits, IsMemberPtr) {
+    ASSERT_EQ(true, is_member_pointer<decltype(&TestClass::Func)>::value);
+    ASSERT_EQ(true, is_member_pointer<int TestClass::*>::value);
+    ASSERT_EQ(true, is_member_pointer<decltype(&TestClass::B)>::value);
+    ASSERT_EQ(false, is_member_pointer<int>::value);
+    ASSERT_EQ(false, is_member_pointer<int(void)>::value);
     ASSERT_EQ(true, is_member_function_pointer<decltype(&TestClass::Func)>::value);
-    ASSERT_EQ(false, is_member_function_pointer<void(int)>::value);
-    ASSERT_EQ(false, is_member_function_pointer<decltype(&TestClass::A)>::value);
+    ASSERT_EQ(false, is_member_function_pointer<int TestClass::*>::value);
+    ASSERT_EQ(false, is_member_object_pointer<decltype(&TestClass::Func)>::value);
+    ASSERT_EQ(true, is_member_object_pointer<int TestClass::*>::value);
+    ASSERT_EQ(false, is_member_object_pointer<int*>::value);
 }
 
 TEST_F(TestTypeTraits, IsNullPtr) {
