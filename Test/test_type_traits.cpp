@@ -234,7 +234,18 @@ TEST_F(TestTypeTraits, IsIntegral) {
     ASSERT_EQ(true, is_integral<signed int>::value);
 }
 
+TEST_F(TestTypeTraits, IsFunction) {
+    ASSERT_EQ(true, is_function<int(int)>::value);
+    ASSERT_EQ(true, is_function<void(int)>::value);
+    ASSERT_EQ(true, is_function<void(int, int, int*, int[])>::value);
+    ASSERT_EQ(false, is_function<decltype(&TestClass::Func)>::value);
+    ASSERT_EQ(false, is_function<void(*)(int, int)>::value);
+}
+
 TEST_F(TestTypeTraits, IsMemberPtr) {
+    ASSERT_EQ(true, is_member_function_pointer<decltype(&TestClass::Func)>::value);
+    ASSERT_EQ(false, is_member_function_pointer<void(int)>::value);
+    ASSERT_EQ(false, is_member_function_pointer<decltype(&TestClass::A)>::value);
 }
 
 TEST_F(TestTypeTraits, IsNullPtr) {

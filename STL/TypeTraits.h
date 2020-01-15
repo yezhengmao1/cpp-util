@@ -44,6 +44,7 @@ template<typename T> struct remove_const { using type = T; };
 template<typename T> struct remove_const<const T> { using type = T; };
 template<typename T> struct remove_volatile { using type = T; };
 template<typename T> struct remove_volatile<volatile T> { using type = T; };
+
 template<typename T> struct add_const { using type = const T; };
 template<typename T> struct add_volatile { using type = volatile T; };
 
@@ -80,16 +81,17 @@ template<> struct is_integral_helper<unsigned long> : true_type {};
 template<> struct is_integral_helper<long long> : true_type {};
 template<> struct is_integral_helper<unsigned long long> : true_type {};
 template<typename T> struct is_integral : is_integral_helper<typename remove_cv<T>::type> {};
-// function
+// function Ret T(Args...) / not include U::T()
 template<typename T> struct is_function : bool_constant<!is_const<const T>::value> {};
-// std::nullptr_t // const std::nullptr_t // const volatile std::nullptr_t
+// std::nullptr_t / const std::nullptr_t / const volatile std::nullptr_t
 template<typename T> struct is_null_pointer : is_same<std::nullptr_t, typename remove_cv<T>::type> {};
-// T* / const T* / const volatile T* not include U::T*
+// T* / const T* / const volatile T* / not include U::T*
 template<typename T> struct is_pointer_helper : false_type {};
 template<typename T> struct is_pointer_helper<T*> : true_type {};
 template<typename T> struct is_pointer : is_pointer_helper<typename remove_cv<T>::type> {};
 // U::T*
 template<typename T> struct is_member_function_pointer_helper : false_type {};
+template<typename T, typename U> struct is_member_function_pointer_helper<T U::*> : is_function<T> {};
 template<typename T> struct is_member_function_pointer : is_member_function_pointer_helper<typename remove_cv<T>::type> {};
 // T&
 template<typename T> struct is_lvalue_reference : false_type {};
