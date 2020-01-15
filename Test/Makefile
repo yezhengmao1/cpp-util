@@ -24,7 +24,10 @@ TARGET_TREE := test_tree
 TEST_ALLOCATOR := test_allocator.cpp
 TARGET_ALLOCATOR := test_allocator
 
-all: sort tree allocator
+TEST_TYPETRAITS := test_type_traits.cpp
+TARGET_TYPETRAITS := test_type_traits
+
+all: sort tree allocator type_traits
 
 sort:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_SORT) $(TEST_MAIN) $(TEST_SORT) $(LDFLAGS)
@@ -34,6 +37,9 @@ tree:
 
 allocator:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_ALLOCATOR) $(TEST_MAIN) $(TEST_ALLOCATOR) $(LDFLAGS)
+
+type_traits:
+	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_TYPETRAITS) $(TEST_MAIN) $(TEST_TYPETRAITS) $(LDFLAGS)
 
 lcov:
 	@gcov *.gcda
@@ -46,6 +52,7 @@ clean:
 	@rm $(TARGET_SORT)
 	@rm $(TARGET_TREE)
 	@rm $(TARGET_ALLOCATOR)
+	@rm $(TARGET_TYPETRAITS)
 	@rm *.gcno
 	@rm *.gcda
 	@rm *.gcov
