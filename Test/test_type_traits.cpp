@@ -150,6 +150,15 @@ TEST_F(TestTypeTraits, IsReference) {
     ASSERT_EQ(true, is_reference<int&&>::value);
 }
 
+TEST_F(TestTypeTraits, IsConst) {
+    ASSERT_EQ(true, is_const<const int>::value);
+    ASSERT_EQ(false, is_const<const int*>::value);
+    ASSERT_EQ(false, is_const<const int&>::value);
+    ASSERT_EQ(true, is_const<int* const>::value);
+    ASSERT_EQ(false, is_const<typename remove_cv<const int&>::type>::value);
+    ASSERT_EQ(true, is_const<typename remove_reference<const int&>::type>::value);
+}
+
 TEST_F(TestTypeTraits, IsFloatingPoint) {
     ASSERT_EQ(true, is_floating_point<float>::value);
     ASSERT_EQ(true, is_floating_point<const float>::value);
@@ -161,13 +170,12 @@ TEST_F(TestTypeTraits, IsFloatingPoint) {
 }
 
 TEST_F(TestTypeTraits, IsPtr) {
-    typedef int (*fun_ptr)(int, int);
     ASSERT_EQ(true, is_pointer<void*>::value);
     ASSERT_EQ(true, is_pointer<const void*>::value);
     ASSERT_EQ(true, is_pointer<volatile const void*>::value);
     ASSERT_EQ(true, is_pointer<volatile void* const>::value);
     ASSERT_EQ(true, is_pointer<void**>::value);
-    ASSERT_EQ(true, is_pointer<fun_ptr>::value);
+    ASSERT_EQ(true, is_pointer<int(*)(int)>::value);
     ASSERT_EQ(false, is_pointer<void>::value);
     ASSERT_EQ(false, is_pointer<int[]>::value);
     ASSERT_EQ(false, is_pointer<int[][10]>::value);

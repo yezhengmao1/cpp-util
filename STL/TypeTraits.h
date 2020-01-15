@@ -34,6 +34,11 @@ using false_type = bool_constant<false>;
 template<typename T, typename U> struct is_same : false_type {};
 template<typename T> struct is_same<T, T> : true_type {};
 
+// 类型修饰判断
+// const 
+template<typename T> struct is_const : false_type {};
+template<typename T> struct is_const<const T> : true_type {};
+
 // const-volatile 说明符操作
 template<typename T> struct remove_const { using type = T; };
 template<typename T> struct remove_const<const T> { using type = T; };
@@ -45,8 +50,11 @@ template<typename T> struct add_volatile { using type = volatile T; };
 template<typename T> struct remove_cv { using type = typename remove_volatile<typename remove_const<T>::type>::type; };
 template<typename T> struct add_cv { using type = typename add_volatile<typename add_const<T>::type>::type; };
 
-// 基本类型判断
+template<typename T> struct remove_reference { using type = T; };
+template<typename T> struct remove_reference<T&> { using type = T; };
+template<typename T> struct remove_reference<T&&> { using type = T; };
 
+// 基本类型判断
 // void / const void / const volatile void
 template<typename T> struct is_void : is_same<void, typename remove_cv<T>::type> {};
 // bool / char / char8_t / char16_t / char32_t / wchar_t / short / int / long / long long 
@@ -72,6 +80,9 @@ template<typename T> struct is_null_pointer : is_same<std::nullptr_t, typename r
 template<typename T> struct is_pointer_helper : false_type {};
 template<typename T> struct is_pointer_helper<T*> : true_type {};
 template<typename T> struct is_pointer : is_pointer_helper<typename remove_cv<T>::type> {};
+// U::T*
+template<typename T> struct is_member_function_pointer_helper : false_type {};
+template<typename T> struct is_member_function_pointer : is_member_function_pointer_helper<typename remove_cv<T>::type> {};
 // T&
 template<typename T> struct is_lvalue_reference : false_type {};
 template<typename T> struct is_lvalue_reference<T&> : true_type {};
