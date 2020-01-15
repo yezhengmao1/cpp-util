@@ -99,3 +99,17 @@ TEST_F(TestTypeTraits, RemoveCV) {
         ASSERT_EQ(i, false);
     }
 }
+
+TEST_F(TestTypeTraits, AddCV) {
+    struct test_case {
+        int fun() { return 1; }
+        int fun() const { return 2; }
+        int fun() volatile { return 3; }
+        int fun() const volatile { return 4; }
+    };
+    
+    ASSERT_EQ(test_case().fun(), 1);
+    ASSERT_EQ(add_const<test_case>::type().fun(), 2);
+    ASSERT_EQ(add_volatile<test_case>::type().fun(), 3);
+    ASSERT_EQ(add_cv<test_case>::type().fun(), 4);
+}

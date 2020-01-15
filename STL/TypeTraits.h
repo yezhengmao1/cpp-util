@@ -45,10 +45,19 @@ template<typename T>
 struct remove_volatile { using type = T; };
 template<typename T>
 struct remove_volatile<volatile T> { using type = T; };
+template<typename T>
+struct add_const { using type = const T; };
+template<typename T>
+struct add_volatile { using type = volatile T; };
 
 template<typename T>
 struct remove_cv { 
     using type = typename remove_volatile<typename remove_const<T>::type>::type; 
+};
+
+template<typename T>
+struct add_cv {
+    using type = typename add_volatile<typename add_const<T>::type>::type;
 };
 
 
