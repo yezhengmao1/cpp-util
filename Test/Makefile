@@ -27,7 +27,10 @@ TARGET_ALLOCATOR := test_allocator
 TEST_TYPETRAITS := test_type_traits.cpp
 TARGET_TYPETRAITS := test_type_traits
 
-all: sort tree allocator type_traits
+TEST_POINTERTRAITS := test_pointer_traits.cpp
+TARGET_POINTERTRAITS := test_pointer_traits
+
+all: sort tree allocator type_traits pointer_traits
 
 sort:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_SORT) $(TEST_MAIN) $(TEST_SORT) $(LDFLAGS)
@@ -40,6 +43,9 @@ allocator:
 
 type_traits:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_TYPETRAITS) $(TEST_MAIN) $(TEST_TYPETRAITS) $(LDFLAGS)
+
+pointer_traits:
+	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_POINTERTRAITS) $(TEST_MAIN) $(TEST_POINTERTRAITS) $(LDFLAGS)
 
 lcov:
 	@gcov *.gcda
