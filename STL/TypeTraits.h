@@ -132,6 +132,11 @@ template<typename T> struct is_array : bool_constant<is_bounded_array<T>::value 
 template<typename T> struct is_arithmetic : bool_constant<is_integral<T>::value ||
                                                           is_floating_point<T>::value> {};
 
+// fundamental
+template<typename T> struct is_fundamental : bool_constant<is_arithmetic<T>::value ||
+                                                           is_void<T>::value ||
+                                                           is_null_pointer<T>::value> {};
+
 // union - compiler support
 #ifdef __GNUC__
 template<typename T> struct is_union : bool_constant<__is_union(T)> {};
