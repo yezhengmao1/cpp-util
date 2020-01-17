@@ -69,6 +69,21 @@ template<typename T> struct remove_pointer<T* volatile> { using type = T; };
 template<typename T> struct remove_pointer<T* const volatile> { using type = T; };
 
 // 基本类型判断
+// union - compiler support
+#ifdef __GNUC__
+template<typename T> struct is_union : bool_constant<__is_union(T)> {};
+#endif
+
+// class - compiler support 
+#ifdef __GNUC__
+template<typename T> struct is_class : bool_constant<__is_class(T)> {};
+#endif
+
+// enum
+#ifdef __GNUC__
+template<typename T> struct is_enum : bool_constant<__is_enum(T)> {};
+#endif
+
 // void / const void / const volatile void
 template<typename T> struct is_void : is_same<void, typename remove_cv<T>::type> {};
 // bool / char / char8_t / char16_t / char32_t / wchar_t / short / int / long / long long 
@@ -127,31 +142,26 @@ template<typename T> struct is_unbounded_array<T[]> : true_type {};
 // array
 template<typename T> struct is_array : bool_constant<is_bounded_array<T>::value ||
                                                      is_unbounded_array<T>::value> {};
-
 // arithmetic
 template<typename T> struct is_arithmetic : bool_constant<is_integral<T>::value ||
                                                           is_floating_point<T>::value> {};
-
 // fundamental
 template<typename T> struct is_fundamental : bool_constant<is_arithmetic<T>::value ||
                                                            is_void<T>::value ||
                                                            is_null_pointer<T>::value> {};
-
-// union - compiler support
-#ifdef __GNUC__
-template<typename T> struct is_union : bool_constant<__is_union(T)> {};
-#endif
-
-// class - compiler support 
-#ifdef __GNUC__
-template<typename T> struct is_class : bool_constant<__is_class(T)> {};
-#endif
-
-// enum
-#ifdef __GNUC__
-template<typename T> struct is_enum : bool_constant<__is_enum(T)> {};
-#endif
-
+// scalar
+template<typename T> struct is_scalar : bool_constant<is_arithmetic<T>::value ||
+                                                      is_enum<T>::value ||
+                                                      is_pointer<T>::value ||
+                                                      is_member_pointer<T>::value ||
+                                                      is_null_pointer<T>::value> {};
+// object
+template<typename T> struct is_object : bool_constant<is_scalar<T>::value ||
+                                                      is_array<T>::value ||
+                                                      is_union<T>::value ||
+                                                      is_class<T>::value> {};
+// compound
+template<typename T> struct is_compound : bool_constant<!is_fundamental<T>::value> {};
 // signed
 template<typename T, bool B> struct is_signed_helper : false_type {};
 template<typename T> struct is_signed_helper<T, true> : conditional<T(-1) < T(0),
