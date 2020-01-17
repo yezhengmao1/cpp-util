@@ -26,11 +26,11 @@ public:
         if(n > std::size_t(-1) / sizeof(T)) {
             throw std::bad_alloc();
         }
-        return static_cast<T*>(::operator new(n * sizeof(T), std::align_val_t(alignof(T))));
+        return static_cast<T*>(::operator new(n * sizeof(T)));
     };
     
     constexpr void deallocate(T *p, std::size_t n) {
-        ::operator delete(p, n * sizeof(T), std::align_val_t(alignof(T)));
+        ::operator delete(p, n * sizeof(T));
         return;
     };
 };
