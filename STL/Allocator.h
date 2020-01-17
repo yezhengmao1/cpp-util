@@ -34,6 +34,11 @@ public:
         return;
     };
 };
+
+template<typename T, typename U>
+constexpr bool operator==(const allocator<T>& lhs, const allocator<T>& rhs) noexcept {
+    return true;
+};
     
 } // STL
 
