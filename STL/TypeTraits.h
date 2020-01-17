@@ -132,6 +132,21 @@ template<typename T> struct is_array : bool_constant<is_bounded_array<T>::value 
 template<typename T> struct is_arithmetic : bool_constant<is_integral<T>::value ||
                                                           is_floating_point<T>::value> {};
 
+// union - compiler support
+#ifdef __GNUC__
+template<typename T> struct is_union : bool_constant<__is_union(T)> {};
+#endif
+
+// class - compiler support 
+#ifdef __GNUC__
+template<typename T> struct is_class : bool_constant<__is_class(T)> {};
+#endif
+
+// enum
+#ifdef __GNUC__
+template<typename T> struct is_enum : bool_constant<__is_enum(T)> {};
+#endif
+
 // signed
 template<typename T, bool B> struct is_signed_helper : false_type {};
 template<typename T> struct is_signed_helper<T, true> : conditional<T(-1) < T(0),
@@ -145,6 +160,8 @@ template<typename T> struct is_unsigned_helper<T, true> : bool_constant<!is_sign
 template<typename T> struct is_unsigned : is_unsigned_helper<T, is_arithmetic<T>::value> {};
 
 // 复合类型判断
+
+// 类型操作
 
 } // STL
 

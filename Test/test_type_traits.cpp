@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <TypeTraits.h>
+#include <type_traits>
 
 using namespace STL;
 
@@ -25,6 +26,18 @@ struct TestClass {
     int A;
     int* B;
     int Func() { return 1; }
+};
+
+union TestUnion {
+    int x;
+    float y;
+    char *m;
+};
+
+enum TestEnum {
+    x = 0,
+    y,
+    z,
 };
 
 int func(integral_constant<int, 1>::type) { return 1; }
@@ -63,6 +76,21 @@ TEST_F(TestTypeTraits, Conditional) {
     kase = std::is_same<int, typename conditional<true, int, double>::type>::value;
     kase &= std::is_same<double, typename conditional<false, int, double>::type>::value;
     ASSERT_EQ(kase, true);
+}
+
+TEST_F(TestTypeTraits, IsUnionEnumClass) {
+    ASSERT_EQ(true, is_union<TestUnion>::value);
+    ASSERT_EQ(false, is_union<TestClass>::value);
+    ASSERT_EQ(false, is_union<TestEnum>::value);
+    ASSERT_EQ(false, is_union<int>::value);
+    ASSERT_EQ(false, is_enum<TestUnion>::value);
+    ASSERT_EQ(false, is_enum<TestClass>::value);
+    ASSERT_EQ(true, is_enum<TestEnum>::value);
+    ASSERT_EQ(false, is_enum<int>::value);
+    ASSERT_EQ(false, is_class<TestUnion>::value);
+    ASSERT_EQ(true, is_class<TestClass>::value);
+    ASSERT_EQ(false, is_class<TestEnum>::value);
+    ASSERT_EQ(false, is_class<int>::value);
 }
 
 TEST_F(TestTypeTraits, TypeIsSame) {
@@ -213,6 +241,7 @@ TEST_F(TestTypeTraits, IsArray) {
     ASSERT_EQ(false, is_bounded_array<int>::value);
     ASSERT_EQ(false, is_bounded_array<int[]>::value);
     ASSERT_EQ(true, is_bounded_array<int[10]>::value);
+    ASSERT_EQ(true, is_bounded_array<const int[10]>::value);
 
     ASSERT_EQ(false, is_unbounded_array<TestClass>::value);
     ASSERT_EQ(true, is_unbounded_array<TestClass[]>::value);
