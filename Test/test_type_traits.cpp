@@ -58,6 +58,12 @@ TEST_F(TestTypeTraits, Bool) {
     ASSERT_EQ(false_type::value, false);
 }
 
+TEST_F(TestTypeTraits, Conditional) {
+    bool kase = false;
+    kase = std::is_same<int, typename conditional<true, int, double>::type>::value;
+    kase &= std::is_same<double, typename conditional<false, int, double>::type>::value;
+    ASSERT_EQ(kase, true);
+}
 
 TEST_F(TestTypeTraits, TypeIsSame) {
     std::vector<bool> truekase = {

@@ -34,6 +34,12 @@ using false_type = bool_constant<false>;
 template<typename T, typename U> struct is_same : false_type {};
 template<typename T> struct is_same<T, T> : true_type {};
 
+// conditional
+template<bool B, typename T, typename F>
+struct conditional { using type = F; };
+template<typename T, typename F>
+struct conditional<true, T, F> { using type = T; };
+
 // 类型修饰判断
 // const 
 template<typename T> struct is_const : false_type {};
