@@ -36,7 +36,7 @@ public:
 };
 
 template<typename T, typename U>
-constexpr bool operator==(const allocator<T>& lhs, const allocator<T>& rhs) noexcept {
+constexpr bool operator==(const allocator<T>& lhs, const allocator<U>& rhs) noexcept {
     return true;
 };
     
