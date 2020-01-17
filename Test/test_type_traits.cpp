@@ -261,3 +261,17 @@ TEST_F(TestTypeTraits, IsNullPtr) {
     ASSERT_EQ(false, is_null_pointer<void*>::value);
     ASSERT_EQ(false, is_null_pointer<int*>::value);
 }
+
+TEST_F(TestTypeTraits, IsArithmetic) {
+    ASSERT_EQ(false, is_arithmetic<TestClass>::value);
+    ASSERT_EQ(true, is_arithmetic<bool>::value);
+    ASSERT_EQ(true, is_arithmetic<int>::value);
+    ASSERT_EQ(true, is_arithmetic<int const>::value);
+    ASSERT_EQ(true, is_arithmetic<const volatile int>::value);
+    ASSERT_EQ(false, is_arithmetic<int*>::value);
+    ASSERT_EQ(false, is_arithmetic<int&>::value);
+    ASSERT_EQ(true, is_arithmetic<char>::value);
+    ASSERT_EQ(true, is_arithmetic<float>::value);
+    ASSERT_EQ(true, is_arithmetic<double>::value);
+    ASSERT_EQ(true, is_arithmetic<unsigned char>::value);
+}

@@ -122,6 +122,10 @@ template<typename T> struct is_unbounded_array<T[]> : true_type {};
 template<typename T> struct is_array : bool_constant<is_bounded_array<T>::value ||
                                                      is_unbounded_array<T>::value> {};
 
+// arithmetic
+template<typename T> struct is_arithmetic : bool_constant<is_integral<T>::value ||
+                                                          is_floating_point<T>::value> {};
+
 // 复合类型判断
 
 } // STL
