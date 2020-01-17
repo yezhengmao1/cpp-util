@@ -289,3 +289,13 @@ TEST_F(TestTypeTraits, IsSigned) {
     ASSERT_EQ(true, is_signed<char>::value);
     ASSERT_EQ(false, is_signed<TestClass>::value);
 }
+
+TEST_F(TestTypeTraits, IsUnsigned) {
+    ASSERT_EQ(std::is_unsigned<char>::value, is_unsigned<char>::value);
+    ASSERT_EQ(std::is_unsigned<unsigned char>::value, is_unsigned<unsigned char>::value);
+    ASSERT_EQ(std::is_unsigned<signed char>::value, is_unsigned<signed char>::value);
+    ASSERT_EQ(false, is_unsigned<float>::value);
+    ASSERT_EQ(false, is_unsigned<double>::value);
+    ASSERT_EQ(false, is_unsigned<char>::value);
+    ASSERT_EQ(true, is_unsigned<unsigned char>::value);
+}

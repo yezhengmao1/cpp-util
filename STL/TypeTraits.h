@@ -140,6 +140,9 @@ template<typename T> struct is_signed_helper<T, true> : conditional<T(-1) < T(0)
 template<typename T> struct is_signed : is_signed_helper<T, is_arithmetic<T>::value> {};
 
 // unsigned
+template<typename T, bool B> struct is_unsigned_helper : false_type {};
+template<typename T> struct is_unsigned_helper<T, true> : bool_constant<!is_signed<T>::value> {};
+template<typename T> struct is_unsigned : is_unsigned_helper<T, is_arithmetic<T>::value> {};
 
 // 复合类型判断
 
