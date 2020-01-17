@@ -1,7 +1,7 @@
 export LCOVMASK = '/usr/local/*'
 # 编译选项
 CC := g++
-CFLAGS := -std=c++11 -g --coverage
+CFLAGS := -std=c++17 -g --coverage
 LDFLAGS := -lgtest -lpthread
 # 头文件
 INCLUDE = -I /usr/local/include \
