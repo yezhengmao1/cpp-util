@@ -132,6 +132,14 @@ template<typename T> struct is_array : bool_constant<is_bounded_array<T>::value 
 template<typename T> struct is_arithmetic : bool_constant<is_integral<T>::value ||
                                                           is_floating_point<T>::value> {};
 
+// signed
+template<typename T, bool A, bool F> struct is_signed_helper : false_type {};
+template<typename T> struct is_signed_helper<T, false, true> : true_type {};
+template<typename T> struct is_signed_helper<T, true, false> : conditional<T(-1) < T(0),
+                                                                           true_type,
+                                                                           false_type>::type {};
+template<typename T> struct is_signed : is_signed_helper<T, is_arithmetic<T>::value, is_floating_point<T>::value> {};
+
 // 复合类型判断
 
 } // STL

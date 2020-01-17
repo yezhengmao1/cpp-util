@@ -281,3 +281,11 @@ TEST_F(TestTypeTraits, IsArithmetic) {
     ASSERT_EQ(true, is_arithmetic<double>::value);
     ASSERT_EQ(true, is_arithmetic<unsigned char>::value);
 }
+
+TEST_F(TestTypeTraits, IsSigned) {
+    ASSERT_EQ(std::is_signed<char>::value, is_signed<char>::value);
+    ASSERT_EQ(std::is_signed<unsigned char>::value, is_signed<unsigned char>::value);
+    ASSERT_EQ(std::is_signed<signed char>::value, is_signed<signed char>::value);
+    ASSERT_EQ(true, is_signed<char>::value);
+    ASSERT_EQ(false, is_signed<TestClass>::value);
+}
