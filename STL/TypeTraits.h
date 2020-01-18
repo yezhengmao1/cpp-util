@@ -31,9 +31,9 @@ using true_type = bool_constant<true>;
 using false_type = bool_constant<false>;
 
 // 类型关系
+// is_same
 template<typename T, typename U> struct is_same : false_type {};
 template<typename T> struct is_same<T, T> : true_type {};
-
 // conditional
 template<bool B, typename T, typename F>
 struct conditional { using type = F; };
@@ -44,24 +44,24 @@ struct conditional<true, T, F> { using type = T; };
 // const 
 template<typename T> struct is_const : false_type {};
 template<typename T> struct is_const<const T> : true_type {};
-
-// const-volatile 说明符操作
+// volatile
+template<typename T> struct is_volatile : false_type {};
+template<typename T> struct is_volatile<volatile T> : true_type {};
+// remove/add const-volatile
 template<typename T> struct remove_const { using type = T; };
 template<typename T> struct remove_const<const T> { using type = T; };
 template<typename T> struct remove_volatile { using type = T; };
 template<typename T> struct remove_volatile<volatile T> { using type = T; };
-
+template<typename T> struct remove_cv { using type = typename remove_volatile<typename remove_const<T>::type>::type; };
 template<typename T> struct add_const { using type = const T; };
 template<typename T> struct add_volatile { using type = volatile T; };
-
-template<typename T> struct remove_cv { using type = typename remove_volatile<typename remove_const<T>::type>::type; };
 template<typename T> struct add_cv { using type = typename add_volatile<typename add_const<T>::type>::type; };
-
+// remove refrence
 template<typename T> struct remove_reference { using type = T; };
 template<typename T> struct remove_reference<T&> { using type = T; };
 template<typename T> struct remove_reference<T&&> { using type = T; };
 template<typename T> struct remove_cvref { using type = typename remove_cv<typename remove_reference<T>::type>::type; };
-
+// remove pointer
 template<typename T> struct remove_pointer { using type = T; };
 template<typename T> struct remove_pointer<T*> { using type = T; };
 template<typename T> struct remove_pointer<T* const> { using type = T; };
@@ -73,12 +73,10 @@ template<typename T> struct remove_pointer<T* const volatile> { using type = T; 
 #ifdef __GNUC__
 template<typename T> struct is_union : bool_constant<__is_union(T)> {};
 #endif
-
 // class - compiler support 
 #ifdef __GNUC__
 template<typename T> struct is_class : bool_constant<__is_class(T)> {};
 #endif
-
 // enum
 #ifdef __GNUC__
 template<typename T> struct is_enum : bool_constant<__is_enum(T)> {};
@@ -168,7 +166,6 @@ template<typename T> struct is_signed_helper<T, true> : conditional<T(-1) < T(0)
                                                                     true_type,
                                                                     false_type>::type {};
 template<typename T> struct is_signed : is_signed_helper<T, is_arithmetic<T>::value> {};
-
 // unsigned
 template<typename T, bool B> struct is_unsigned_helper : false_type {};
 template<typename T> struct is_unsigned_helper<T, true> : bool_constant<!is_signed<T>::value> {};
@@ -177,6 +174,89 @@ template<typename T> struct is_unsigned : is_unsigned_helper<T, is_arithmetic<T>
 // 复合类型判断
 
 // 类型操作
+// make unsigned 
+template<typename T> struct make_unsigned {
+    static_assert(!(is_integral<T>::value || is_enum<T>::value), 
+                  "the template argument to make_unsigned must to an integral or enum type");
+    static_assert(is_same<bool, typename remove_cv<T>::type>::value,
+                  "the template argument to make_unsigned must not to the type bool");
+    // remove const and volatile
+    using no_cv_t = typename remove_cv<T>::type;
+    using base_integer_type = \
+    typename conditional<
+        (is_integral<T>::value &&
+        is_unsigned<T>::Value &&
+        !is_same<no_cv_t, char>::value &&
+        !is_same<no_cv_t, wchar_t>::value &&
+        !is_same<no_cv_t, char16_t>::value &&
+        !is_same<no_cv_t, bool>::value),
+        T,
+        typename conditional<
+            (is_integral<T>::value &&
+            !is_same<no_cv_t, char>::value &&
+            !is_same<no_cv_t, wchar_t>::value &&
+            !is_same<no_cv_t, char16_t>::value &&
+            !is_same<no_cv_t, bool>::value),
+            // regular interger type
+            typename conditional<
+                is_same<no_cv_t, char>::value,
+                unsigned char,
+                typename conditional<
+                    is_same<no_cv_t, short>::value,
+                    unsigned short,
+                    typename conditional<
+                        is_same<no_cv_t, int>::value,
+                        unsigned int,
+                        typename conditional<
+                            is_same<no_cv_t, long>::value,
+                            unsigned long,
+                            typename conditional<
+                                is_same<no_cv_t, long long>::value,
+                                unsigned long long,
+                                unsigned long long
+                            >::type
+                        >::type
+                    >::type
+                >::type
+            >::type,
+            // not a regular integer type
+            typename conditional<
+                sizeof(no_cv_t) == sizeof(unsigned char),
+                unsigned char,
+                typename conditional<
+                    sizeof(no_cv_t) == sizeof(unsigned short),
+                    unsigned short,
+                    typename conditional<
+                        sizeof(no_cv_t) == sizeof(unsigned int),
+                        unsigned int,
+                        typename conditional<
+                            sizeof(no_cv_t) == sizeof(unsigned long),
+                            unsigned long,
+                            typename conditional<
+                                sizeof(no_cv_t) == sizeof(unsigned long long),
+                                unsigned long long,
+                                unsigned long long
+                            >::type
+                        >::type
+                    >::type
+                >::type
+            >::type
+        >::type
+    >::type;
+
+    // add back const
+    using const_base_integer_type = typename conditional<
+        is_const<T>::value,
+        typename add_const<base_integer_type>::type,
+        base_integer_type
+        >::type;
+    // add back volatile
+    using type = typename conditional<
+        is_volatile<T>::value,
+        typename add_volatile<const_base_integer_type>::type,
+        const_base_integer_type
+        >::type;
+};
 
 } // STL
 
