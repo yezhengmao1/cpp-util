@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
 #include "RBTree.h"
-#include "MallocAllocator.h"
 
 #include <map>
 
