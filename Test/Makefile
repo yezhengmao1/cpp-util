@@ -1,4 +1,7 @@
 export LCOVMASK = '/usr/local/*'
+GCOV := gcov
+LCOV := lcov
+GENHTML := genhtml
 # 编译选项
 CC := g++
 CFLAGS := -std=c++17 -g --coverage
@@ -27,13 +30,22 @@ TARGET_ALLOCATOR := test_allocator
 TEST_TYPETRAITS := test_type_traits.cpp
 TARGET_TYPETRAITS := test_type_traits
 
+TEST_TYPETRAITSLIB = test_type_traits_lib.cpp
+TARGET_TYPETRAITSLIB = test_type_traits_lib
+
 TEST_POINTERTRAITS := test_pointer_traits.cpp
 TARGET_POINTERTRAITS := test_pointer_traits
 
 TEST_ALLOCATORTRAITS := test_allocator_traits.cpp
 TARGET_ALLOCATORRAITS := test_allocator_traits
 
-all: sort tree allocator type_traits pointer_traits allocator_traits
+all: sort \
+	 tree \
+	 allocator \
+	 type_traits \
+	 type_traits_lib \
+	 pointer_traits \
+	 allocator_traits
 
 sort:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_SORT) $(TEST_MAIN) $(TEST_SORT) $(LDFLAGS)
@@ -47,6 +59,9 @@ allocator:
 type_traits:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_TYPETRAITS) $(TEST_MAIN) $(TEST_TYPETRAITS) $(LDFLAGS)
 
+type_traits_lib:
+	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_TYPETRAITSLIB) $(TEST_MAIN) $(TEST_TYPETRAITSLIB) $(LDFLAGS)
+
 pointer_traits:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_POINTERTRAITS) $(TEST_MAIN) $(TEST_POINTERTRAITS) $(LDFLAGS)
 
@@ -54,10 +69,10 @@ allocator_traits:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_ALLOCATORRAITS) $(TEST_MAIN) $(TEST_ALLOCATORTRAITS) $(LDFLAGS)
 
 lcov:
-	@gcov *.gcda
-	@lcov --capture --directory ./ --output-file algorithm.info
-	@lcov --remove algorithm.info $(LCOVMASK) -o algorithm.info
-	@genhtml algorithm.info --output-directory result
+	@$(GCOV) *.gcda
+	@$(LCOV) --capture --directory ./ --output-file algorithm.info
+	@$(LCOV) --remove algorithm.info $(LCOVMASK) -o algorithm.info
+	@$(GENHTML) algorithm.info --output-directory result
 
 .PHONY : clean
 clean:
