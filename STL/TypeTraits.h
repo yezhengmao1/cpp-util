@@ -30,6 +30,10 @@ using bool_constant = integral_constant<bool, B>;
 using true_type = bool_constant<true>;
 using false_type = bool_constant<false>;
 
+// alignment_of
+template<typename T>
+struct alignment_of : integral_constant<std::size_t, alignof(T)> {};
+
 // 类型关系
 // is_same
 template<typename T, typename U> struct is_same : false_type {};

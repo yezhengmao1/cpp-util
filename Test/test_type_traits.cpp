@@ -40,6 +40,9 @@ enum TestEnum {
     z,
 };
 
+struct VoidClass {
+};
+
 int func(integral_constant<int, 1>::type) { return 1; }
 int func(integral_constant<int, 2>::type) { return 2; }
 
@@ -65,6 +68,11 @@ TEST_F(TestTypeTraits, Constant) {
     ASSERT_EQ(test_func<2>(), 2);
 }
 
+TEST_F(TestTypeTraits, AlignmentOf) {
+    ASSERT_EQ(alignment_of<int>::value, 4);
+    ASSERT_EQ(alignment_of<double>::value, 8);
+    ASSERT_EQ(alignment_of<VoidClass>::value, 1);
+}
 
 TEST_F(TestTypeTraits, Bool) {
     ASSERT_EQ(true_type::value, true);
