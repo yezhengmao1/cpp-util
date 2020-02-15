@@ -33,6 +33,13 @@ using false_type = bool_constant<false>;
 // alignment_of
 template<typename T>
 struct alignment_of : integral_constant<std::size_t, alignof(T)> {};
+// rank
+template<typename T>
+struct rank : integral_constant<std::size_t, 0> {};
+template<typename T>
+struct rank<T[]> : integral_constant<std::size_t, rank<T>::value + 1> {};
+template<typename T, std::size_t N>
+struct rank<T[N]> : integral_constant<std::size_t, rank<T>::value + 1> {};
 
 // 类型关系
 // is_same

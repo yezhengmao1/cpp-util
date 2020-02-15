@@ -74,6 +74,18 @@ TEST_F(TestTypeTraits, AlignmentOf) {
     ASSERT_EQ(alignment_of<VoidClass>::value, 1);
 }
 
+TEST_F(TestTypeTraits, Rank) {
+    ASSERT_EQ(rank<int>{}, 0);
+    ASSERT_EQ(rank<int[]>{}, 1);
+    ASSERT_EQ(rank<int[][1]>{}, 2);
+    ASSERT_EQ(rank<int[][1][1]>{}, 3);
+
+    ASSERT_EQ(rank<int>::value, 0);
+    ASSERT_EQ(rank<int[]>::value, 1);
+    ASSERT_EQ(rank<int[][1]>::value, 2);
+    ASSERT_EQ(rank<int[][1][1]>::value, 3);
+}
+
 TEST_F(TestTypeTraits, Bool) {
     ASSERT_EQ(true_type::value, true);
     ASSERT_EQ(false_type::value, false);
