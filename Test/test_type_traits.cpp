@@ -86,6 +86,26 @@ TEST_F(TestTypeTraits, Rank) {
     ASSERT_EQ(rank<int[][1][1]>::value, 3);
 }
 
+TEST_F(TestTypeTraits, Extent) {
+    constexpr int ints[] = {0, 1, 2, 3, 4};
+    std::vector<bool> kase = {
+        extent<int[1]>::value == 1,
+        extent<double[2][3][4], 0>::value == 2,
+        extent<double[2][3][4], 1>::value == 3,
+        extent<double[2][3][4], 2>::value == 4,
+        extent<double[2][3][4], 3>::value == 0,
+        extent<int[][2]>::value == 0,
+        extent<int[][2], 1>::value == 2,
+        extent<int*>::value == 0,
+        extent<TestClass>::value == 0,
+        extent<int*, 100>::value == 0,
+        extent<decltype(ints)>::value == 5,
+    };
+    for(auto b : kase) {
+        ASSERT_EQ(true, b);
+    }
+}
+
 TEST_F(TestTypeTraits, Bool) {
     ASSERT_EQ(true_type::value, true);
     ASSERT_EQ(false_type::value, false);

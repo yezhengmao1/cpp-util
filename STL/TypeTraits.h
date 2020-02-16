@@ -10,19 +10,17 @@ struct integral_constant {
 
     static constexpr T value = v;
 
+    // implicit conversion
     // this will be implicity call like:
     // type tv;
     // value_type t = tv;
     // value_type t = tv.operator value_type();
     constexpr operator value_type() const noexcept { return value; }
-    // this will be call
+    // overload operator ()
+    // this will be call like:
     // value_type t = tv();
     constexpr value_type operator ()() const noexcept { return value; }
 };
-
-// c++17 below can be delete
-template<typename T, T v>
-constexpr T integral_constant<T, v>::value;
 
 template<bool B>
 using bool_constant = integral_constant<bool, B>;
@@ -40,6 +38,17 @@ template<typename T>
 struct rank<T[]> : integral_constant<std::size_t, rank<T>::value + 1> {};
 template<typename T, std::size_t N>
 struct rank<T[N]> : integral_constant<std::size_t, rank<T>::value + 1> {};
+//extent
+template<typename T, unsigned N = 0>
+struct extent : integral_constant<std::size_t, 0> {};
+template<typename T, std::size_t I>
+struct extent<T[I], 0> : integral_constant<std::size_t, I> {};
+template<typename T, std::size_t I, unsigned N>
+struct extent<T[I], N> : extent<T, N - 1> {};
+template<typename T>
+struct extent<T[], 0> : integral_constant<std::size_t, 0> {};
+template<typename T, unsigned N>
+struct extent<T[], N> : extent<T, N - 1> {};
 
 // 类型关系
 // is_same
