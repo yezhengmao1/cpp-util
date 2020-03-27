@@ -12,6 +12,7 @@ INCLUDE = -I /usr/local/include \
           -I ../Sort \
 		  -I ../Tree \
 		  -I ../String \
+		  -I ../Search \
 # 源文件
 TEST_MAIN := test_main.cpp
 
@@ -39,13 +40,17 @@ TARGET_POINTERTRAITS := test_pointer_traits
 TEST_ALLOCATORTRAITS := test_allocator_traits.cpp
 TARGET_ALLOCATORRAITS := test_allocator_traits
 
+TEST_BINARYSEARCH := test_binary_search.cpp
+TARGET_BINARYSEARCH := test_binary_search
+
 all: sort \
 	 tree \
 	 allocator \
 	 type_traits \
 	 type_traits_lib \
 	 pointer_traits \
-	 allocator_traits
+	 allocator_traits \
+	 binary_search
 
 sort:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_SORT) $(TEST_MAIN) $(TEST_SORT) $(LDFLAGS)
@@ -68,6 +73,9 @@ pointer_traits:
 allocator_traits:
 	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_ALLOCATORRAITS) $(TEST_MAIN) $(TEST_ALLOCATORTRAITS) $(LDFLAGS)
 
+binary_search:
+	$(CC) $(INCLUDE) $(CFLAGS) -o $(TARGET_BINARYSEARCH) $(TEST_MAIN) $(TEST_BINARYSEARCH) $(LDFLAGS)
+
 lcov:
 	@$(GCOV) *.gcda
 	@$(LCOV) --capture --directory ./ --output-file algorithm.info
@@ -80,6 +88,7 @@ clean:
 	@rm $(TARGET_TREE)
 	@rm $(TARGET_ALLOCATOR)
 	@rm $(TARGET_TYPETRAITS)
+	@rm $(TARGET_BINARYSEARCH)
 	@rm *.gcno
 	@rm *.gcda
 	@rm *.gcov
