@@ -30,7 +30,7 @@ TEST_F(BinarySearchTest, UpperBound) {
 
 TEST_F(BinarySearchTest, Lowerbound) {
     std::vector<int> data = { 1, 1, 2, 3, 3, 3, 3, 4, 4, 4, 5, 5, 6 };
-    auto it = Lowerbound(data.begin(), data.end(), 4);
+    auto it = LowerBound(data.begin(), data.end(), 4);
     auto step = std::distance(data.begin(), it);
     ASSERT_EQ(step, 7);
 }

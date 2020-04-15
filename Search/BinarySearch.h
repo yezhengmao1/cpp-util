@@ -25,7 +25,7 @@ It UpperBound(It first, It end, const T& value, Compare cmp = Compare()) {
 }
 
 template<class It, class T = value_type_t<It>, class Compare = std::less<value_type_t<It>>>
-It Lowerbound(It first, It end, const T& value, Compare cmp = Compare()) {
+It LowerBound(It first, It end, const T& value, Compare cmp = Compare()) {
     auto count = std::distance(first, end);
     auto it = first;
     while (count > 0) {
@@ -44,7 +44,7 @@ It Lowerbound(It first, It end, const T& value, Compare cmp = Compare()) {
 
 template<class It, class T = value_type_t<It>, class Compare = std::less<value_type_t<It>>>
 bool BinarySearch(It first, It end, const T& value, Compare cmp = Compare()) {
-    first = Lowerbound(first, end, value, cmp);
+    first = LowerBound(first, end, value, cmp);
     return (!(first == end) && !(cmp(value, *first)));
 }
 
