@@ -42,5 +42,10 @@ It Lowerbound(It first, It end, const T& value, Compare cmp = Compare()) {
     return first;
 }
 
+template<class It, class T = value_type_t<It>, class Compare = std::less<value_type_t<It>>>
+bool BinarySearch(It first, It end, const T& value, Compare cmp = Compare()) {
+    first = Lowerbound(first, end, value, cmp);
+    return (!(first == end) && !(cmp(value, *first)));
+}
 
 #endif
