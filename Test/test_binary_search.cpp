@@ -26,6 +26,10 @@ TEST_F(BinarySearchTest, UpperBound) {
     auto it = UpperBound(data.begin(), data.end(), 4);
     auto step = std::distance(data.begin(), it);
     ASSERT_EQ(step, 10);
+    it = UpperBound(data.begin(), data.end(), 0);
+    ASSERT_EQ(it, data.begin());
+    it = UpperBound(data.begin(), data.end(), 7);
+    ASSERT_EQ(it, data.end());
 }
 
 TEST_F(BinarySearchTest, Lowerbound) {
@@ -33,6 +37,8 @@ TEST_F(BinarySearchTest, Lowerbound) {
     auto it = LowerBound(data.begin(), data.end(), 4);
     auto step = std::distance(data.begin(), it);
     ASSERT_EQ(step, 7);
+    it = LowerBound(data.begin(), data.end(), 0);
+    ASSERT_EQ(data.begin(), it);
 }
 
 TEST_F(BinarySearchTest, BinarySearch) {
