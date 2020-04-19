@@ -21,10 +21,10 @@ TEST_SOURCE := $(wildcard *.cpp)
 TEST_MAIN := test_main.cpp
 TEST_CASE := $(basename $(filter-out $(TEST_MAIN), $(TEST_SOURCE)))
 
-all: clean $(TEST_CASE)
+all: $(TEST_CASE)
 	$(CC) -o test_all $(INCLUDE) $(TEST_MAIN) $(addsuffix .cpp, $(TEST_CASE)) $(LDFLAGS) $(CFLAGS)
 
-$(TEST_CASE): clean
+$(TEST_CASE):
 	$(CC) -o $@ $(INCLUDE) $(TEST_MAIN) $(addsuffix .cpp, $@) $(LDFLAGS) $(CFLAGS)
 
 .PHONY : clean lcov
