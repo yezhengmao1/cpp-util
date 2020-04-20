@@ -7,6 +7,7 @@
 std::vector<std::size_t> KmpTable(const char *substr) {
     std::vector<std::size_t> table(2, 0);
     std::size_t k = 0;
+
     for(std::size_t i = 1; substr[i] != '\0'; ++i) {
         while(k > 0 && substr[i] != substr[k]) {
             k = table[k];
@@ -14,10 +15,12 @@ std::vector<std::size_t> KmpTable(const char *substr) {
         substr[i] == substr[k] ? ++k : k;
         table.push_back(k);
     }
+
     return table;
 }
 
 std::vector<std::size_t> KmpSearch(const char* str, const char* substr) {
+    assert(str != nullptr);
     assert(substr != nullptr);
     assert(substr[0] != '\0');
 
