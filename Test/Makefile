@@ -24,7 +24,7 @@ TEST_CASE := $(basename $(filter-out $(TEST_MAIN), $(TEST_SOURCE)))
 all: $(TEST_CASE)
 	$(CC) -o test_all $(INCLUDE) $(TEST_MAIN) $(addsuffix .cpp, $(TEST_CASE)) $(LDFLAGS) $(CFLAGS)
 
-$(TEST_CASE):
+$(TEST_CASE): clean
 	$(CC) -o $@ $(INCLUDE) $(TEST_MAIN) $(addsuffix .cpp, $@) $(LDFLAGS) $(CFLAGS)
 
 .PHONY : clean lcov
