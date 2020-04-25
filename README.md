@@ -19,7 +19,7 @@ $ make all
 ```bash
 $ make <test_case>
 # 例如生成 test_sort.cpp 测试用例
-# $ make sort
+# $ make test_sort
 ```
 
 运行测试用例后，生成代码覆盖率
@@ -34,6 +34,7 @@ $ make lcov
 ### Search - 搜索算法
 
 [二分搜索](http://hh-yzm.com/index.php/archives/42/)
+[KMP](http://hh-yzm.com/index.php/archives/44/)
 
 ### Sort - 排序算法
 
