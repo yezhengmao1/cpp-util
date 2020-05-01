@@ -15,6 +15,7 @@ INCLUDE = -I /usr/local/include \
 		  -I ../Tree \
 		  -I ../String \
 		  -I ../Search \
+			-I ../Math \
 
 # 源文件
 TEST_SOURCE := $(wildcard *.cpp)

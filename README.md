@@ -17,9 +17,9 @@ $ make all
 生成单个测试用例，test_case 为相应 cpp 文件测试用例
 
 ```bash
-$ make <test_case>
+# $ make <test_case>
 # 例如生成 test_sort.cpp 测试用例
-# $ make test_sort
+$ make test_sort
 ```
 
 运行测试用例后，生成代码覆盖率
