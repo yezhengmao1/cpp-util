@@ -45,5 +45,5 @@ $ make lcov
 [堆排序](http://hh-yzm.com/index.php/archives/34/#3.5.%E5%A0%86%E6%8E%92%E5%BA%8F)
 [快速排序](http://hh-yzm.com/index.php/archives/34/#3.6.%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F)
 
-### Tree - 树
-
+### Thread - 多线程
+[线程池](http://www.hh-yzm.com/index.php/archives/45/)
