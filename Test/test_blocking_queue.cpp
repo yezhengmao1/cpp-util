@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
 
-#include "SynchronizedQueue.h"
+#include "BlockingQueue.h"
 
 #include <memory>
 #include <thread>
 
-class SynchronizedQueueTest : public ::testing::Test {
+class BlockingQueueTest : public ::testing::Test {
 protected:
     virtual void SetUp() {}
     virtual void TearDown() {}
@@ -14,24 +14,24 @@ public:
     static void TearDownTestCase();
 };
 
-void SynchronizedQueueTest::SetUpTestCase() {
+void BlockingQueueTest::SetUpTestCase() {
 
 }
 
-void SynchronizedQueueTest::TearDownTestCase() {
+void BlockingQueueTest::TearDownTestCase() {
 
 }
 
-TEST_F(SynchronizedQueueTest, SyncQueueCTorDtor) {
+TEST_F(BlockingQueueTest, SyncQueueCTorDtor) {
   {
-  std::shared_ptr<SynchronizedQueue<int>> pQ = 
-    std::make_shared<SynchronizedQueue<int>>(10);
+  std::shared_ptr<BlockingQueue<int>> pQ = 
+    std::make_shared<BlockingQueue<int>>(10);
   }
-  SynchronizedQueue<int> q(10);
+  BlockingQueue<int> q(10);
 }
 
-TEST_F(SynchronizedQueueTest, SyncQueueAdd) {
-  SynchronizedQueue<int> q(10);
+TEST_F(BlockingQueueTest, SyncQueueAdd) {
+  BlockingQueue<int> q(10);
   for(int i = 0; i < 10; ++i) {
     q.push(i);
   }
@@ -42,8 +42,8 @@ TEST_F(SynchronizedQueueTest, SyncQueueAdd) {
 }
 
 void ConsumerProducer(int item, int iCt, int iPt) {
-  std::shared_ptr<SynchronizedQueue<int>> q = 
-    std::make_shared<SynchronizedQueue<int>>(10);
+  std::shared_ptr<BlockingQueue<int>> q = 
+    std::make_shared<BlockingQueue<int>>(10);
 
   std::thread p([q, item, iPt]{
         for(int i = 0; i < item; ++i) {
@@ -66,10 +66,10 @@ void ConsumerProducer(int item, int iCt, int iPt) {
   c.join();
 }
 
-TEST_F(SynchronizedQueueTest, ConsumerFasterProducer) {
+TEST_F(BlockingQueueTest, ConsumerFasterProducer) {
   ConsumerProducer(100, 1, 10);
 }
 
-TEST_F(SynchronizedQueueTest, ProducerFasterConsumer) {
+TEST_F(BlockingQueueTest, ProducerFasterConsumer) {
   ConsumerProducer(100, 10, 1);
 }

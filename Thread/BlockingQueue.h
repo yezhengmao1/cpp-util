@@ -1,21 +1,21 @@
-#ifndef SYNCHRONIZED_QUEUE_H_
-#define SYNCHRONIZED_QUEUE_H_
+#ifndef BLOCKING_QUEUE_H_
+#define BLOCKING_QUEUE_H_
 
 #include <queue>
 #include <mutex>
 #include <condition_variable>
 
 template<typename T>
-class SynchronizedQueue {
-  using self_t = SynchronizedQueue;
+class BlockingQueue {
+  using self_t = BlockingQueue;
 public:
-  SynchronizedQueue(size_t);
-  ~SynchronizedQueue() = default;
+  BlockingQueue(size_t);
+  ~BlockingQueue() = default;
 
-  SynchronizedQueue(const self_t&) = delete;
-  SynchronizedQueue(const self_t&&) = delete;
-  SynchronizedQueue& operator=(const self_t&) = delete;
-  SynchronizedQueue& operator=(const self_t&&) = delete;
+  BlockingQueue(const self_t&) = delete;
+  BlockingQueue(const self_t&&) = delete;
+  BlockingQueue& operator=(const self_t&) = delete;
+  BlockingQueue& operator=(const self_t&&) = delete;
 
   void push(const T&);
   T pop();
@@ -29,7 +29,7 @@ private:
 };
 
 template<typename T>
-SynchronizedQueue<T>::SynchronizedQueue(size_t num) :
+BlockingQueue<T>::BlockingQueue(size_t num) :
   queue_(),
   mutex_(),
   condition_() {
@@ -37,7 +37,7 @@ SynchronizedQueue<T>::SynchronizedQueue(size_t num) :
 }
 
 template<typename T>
-void SynchronizedQueue<T>::push(const T& val) {
+void BlockingQueue<T>::push(const T& val) {
   std::unique_lock<std::mutex> locker(mutex_);
   condition_.wait(locker, [this]()->bool{ return this->queue_.size() < sMax_; });
   queue_.push(val);
@@ -45,7 +45,7 @@ void SynchronizedQueue<T>::push(const T& val) {
 }
 
 template<typename T>
-T SynchronizedQueue<T>::pop() {
+T BlockingQueue<T>::pop() {
   std::unique_lock<std::mutex> locker(mutex_);
   condition_.wait(locker, [this]()->bool{ return !(this->queue_.empty()); });
   T ret = std::move(queue_.front());
