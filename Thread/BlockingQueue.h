@@ -25,32 +25,38 @@ private:
 
   std::queue<T> queue_;
   std::mutex mutex_;
-  std::condition_variable condition_;
+  std::condition_variable not_full_;
+  std::condition_variable not_empty_;
 };
 
 template<typename T>
 BlockingQueue<T>::BlockingQueue(size_t num) :
   queue_(),
   mutex_(),
-  condition_() {
+  not_full_(),
+  not_empty_() {
   sMax_ = num;
 }
 
 template<typename T>
 void BlockingQueue<T>::enqueue(const T& val) {
   std::unique_lock<std::mutex> locker(mutex_);
-  condition_.wait(locker, [this]()->bool{ return this->queue_.size() < sMax_; });
+  if(queue_.size() >= sMax_) {
+    not_full_.wait(locker, [this]()->bool{ return this->queue_.size() < sMax_; });
+  }
   queue_.push(val);
-  condition_.notify_one();
+  not_empty_.notify_one();
 }
 
 template<typename T>
 T BlockingQueue<T>::dequeue() {
   std::unique_lock<std::mutex> locker(mutex_);
-  condition_.wait(locker, [this]()->bool{ return !(this->queue_.empty()); });
+  if(queue_.empty()) {
+    not_empty_.wait(locker, [this]()->bool{ return !(this->queue_.empty()); });
+  }
   T ret = std::move(queue_.front());
   queue_.pop();
-  condition_.notify_one();
+  not_full_.notify_one();
   return ret;
 }
 
