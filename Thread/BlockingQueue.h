@@ -17,8 +17,8 @@ public:
   BlockingQueue& operator=(const self_t&) = delete;
   BlockingQueue& operator=(const self_t&&) = delete;
 
-  void push(const T&);
-  T pop();
+  void enqueue(const T&);
+  T dequeue();
 
 private:
   size_t sMax_;
@@ -37,7 +37,7 @@ BlockingQueue<T>::BlockingQueue(size_t num) :
 }
 
 template<typename T>
-void BlockingQueue<T>::push(const T& val) {
+void BlockingQueue<T>::enqueue(const T& val) {
   std::unique_lock<std::mutex> locker(mutex_);
   condition_.wait(locker, [this]()->bool{ return this->queue_.size() < sMax_; });
   queue_.push(val);
@@ -45,7 +45,7 @@ void BlockingQueue<T>::push(const T& val) {
 }
 
 template<typename T>
-T BlockingQueue<T>::pop() {
+T BlockingQueue<T>::dequeue() {
   std::unique_lock<std::mutex> locker(mutex_);
   condition_.wait(locker, [this]()->bool{ return !(this->queue_.empty()); });
   T ret = std::move(queue_.front());

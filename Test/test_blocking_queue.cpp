@@ -33,10 +33,10 @@ TEST_F(BlockingQueueTest, SyncQueueCTorDtor) {
 TEST_F(BlockingQueueTest, SyncQueueAdd) {
   BlockingQueue<int> q(10);
   for(int i = 0; i < 10; ++i) {
-    q.push(i);
+    q.enqueue(i);
   }
   for(int i = 0; i < 10; ++i) {
-    int t = q.pop();
+    int t = q.dequeue();
     ASSERT_EQ(i, t);
   }
 }
@@ -47,14 +47,14 @@ void ConsumerProducer(int item, int iCt, int iPt) {
 
   std::thread p([q, item, iPt]{
         for(int i = 0; i < item; ++i) {
-          q->push(i);
+          q->enqueue(i);
           std::this_thread::sleep_for(std::chrono::milliseconds(iPt));
         }
       });
   std::thread c([q, item, iCt]{
         int cmp = 0;
         while(true) {
-          int i = q->pop();
+          int i = q->dequeue();
           ASSERT_EQ(cmp, i);
           ++cmp;
           if(cmp == item) { return; }
