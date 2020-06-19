@@ -48,3 +48,6 @@ $ make lcov
 ### Thread - 多线程
 [线程池](http://www.hh-yzm.com/index.php/archives/45/)
 [阻塞队列](http://hh-yzm.com/index.php/archives/46/)
+
+### Math - 数学
+[全排列](http://hh-yzm.com/index.php/archives/48/)
