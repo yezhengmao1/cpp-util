@@ -33,21 +33,21 @@ $ make lcov
 
 ### Search - 搜索算法
 
-[二分搜索](http://hh-yzm.com/index.php/archives/42/)
-[KMP](http://hh-yzm.com/index.php/archives/44/)
+[二分搜索](http://yezhem.com/index.php/archives/42/)
+[KMP](http://yezhem.com/index.php/archives/44/)
 
 ### Sort - 排序算法
 
-[冒泡排序](http://hh-yzm.com/index.php/archives/34/#3.2.%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F)
-[插入排序](http://hh-yzm.com/index.php/archives/34/#3.1.%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F)
-[选择排序](http://hh-yzm.com/index.php/archives/34/#3.3.%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F)
-[归并排序](http://hh-yzm.com/index.php/archives/34/#3.4.%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F)
-[堆排序](http://hh-yzm.com/index.php/archives/34/#3.5.%E5%A0%86%E6%8E%92%E5%BA%8F)
-[快速排序](http://hh-yzm.com/index.php/archives/34/#3.6.%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F)
+[冒泡排序](http://yezhem.com/index.php/archives/34/#3.2.%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F)
+[插入排序](http://yezhem.com/index.php/archives/34/#3.1.%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F)
+[选择排序](http://yezhem.com/index.php/archives/34/#3.3.%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F)
+[归并排序](http://yezhem.com/index.php/archives/34/#3.4.%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F)
+[堆排序](http://yezhem.com/index.php/archives/34/#3.5.%E5%A0%86%E6%8E%92%E5%BA%8F)
+[快速排序](http://yezhem.com/index.php/archives/34/#3.6.%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F)
 
 ### Thread - 多线程
-[线程池](http://www.hh-yzm.com/index.php/archives/45/)
-[阻塞队列](http://hh-yzm.com/index.php/archives/46/)
+[线程池](http://yezhem.com/index.php/archives/45/)
+[阻塞队列](http://yezhem.com/index.php/archives/46/)
 
 ### Math - 数学
-[全排列](http://hh-yzm.com/index.php/archives/48/)
+[全排列](http://yezhem.com/index.php/archives/48/)
